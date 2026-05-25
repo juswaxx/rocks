@@ -136,7 +136,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-1 md:col-span-2">
               <p className="text-3xl font-headline font-black italic text-primary mb-6">Puff N' Plate Cebu</p>
-              <p className="text-white/40 max-w-sm mb-8">Bringing the authentic culinary heritage of Cebu to your doorstep since 2024. Quality you can taste, speed you can trust.</p>
+              <p className="text-white/40 max-w-sm mb-8">Bringing the authentic culinary heritage of Cebu to your doorstep since 2026. Quality you can taste, speed you can trust.</p>
               <div className="flex gap-4">
                 {[1,2,3,4].map(i => (
                   <div key={i} className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-pointer">
