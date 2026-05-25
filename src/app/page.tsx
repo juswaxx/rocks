@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Navbar } from '@/components/navbar'
@@ -35,7 +34,7 @@ export default function Home() {
             <h1 className="text-6xl md:text-8xl font-headline font-black text-white mb-8 leading-[1.1]">
               The Queen City's <span className="text-primary italic">Best Flavors</span>
             </h1>
-            <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-xl leading-relaxed">
+            <p className="text-xl md:text-2xl text-white/80 mb-12 max-wxl leading-relaxed">
               From legendary lechon to sweet Mactan mangoes, we bring the soul of Cebuano cuisine straight to your door.
             </p>
             <div className="flex flex-col sm:flex-row gap-6">
@@ -165,7 +164,7 @@ export default function Home() {
             </div>
           </div>
           <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-sm text-white/20">&copy; 2024 Puff N' Plate Cebu. All rights reserved.</p>
+            <p className="text-sm text-white/20">&copy; 2026 Puff N' Plate Cebu. All rights reserved.</p>
             <div className="flex items-center gap-6">
               <div className="h-6 w-10 bg-white/5 rounded border border-white/10" />
               <div className="h-6 w-10 bg-white/5 rounded border border-white/10" />
