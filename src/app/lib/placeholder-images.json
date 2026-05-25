@@ -3,21 +3,27 @@
   "placeholderImages": [
     {
       "id": "hero-bg",
-      "description": "Filipino food spread",
-      "imageUrl": "https://picsum.photos/seed/food1/1200/600",
-      "imageHint": "filipino feast"
+      "description": "Cebuano food spread with lechon",
+      "imageUrl": "https://picsum.photos/seed/cebufood/1200/600",
+      "imageHint": "cebu lechon"
     },
     {
-      "id": "restaurant-cebu",
-      "description": "Cebu Lechon House",
-      "imageUrl": "https://picsum.photos/seed/restaurant1/600/400",
+      "id": "restaurant-cebu-lechon",
+      "description": "Authentic Cebu Lechon",
+      "imageUrl": "https://picsum.photos/seed/lechonhouse/600/400",
       "imageHint": "roasted pig"
     },
     {
-      "id": "restaurant-tapsilog",
-      "description": "Tapsilog Express",
-      "imageUrl": "https://picsum.photos/seed/restaurant2/600/400",
-      "imageHint": "filipino breakfast"
+      "id": "restaurant-larsian",
+      "description": "Larsian BBQ Grill",
+      "imageUrl": "https://picsum.photos/seed/larsian/600/400",
+      "imageHint": "filipino bbq"
+    },
+    {
+      "id": "restaurant-pungko",
+      "description": "Pungko-Pungko Central",
+      "imageUrl": "https://picsum.photos/seed/pungkopungko/600/400",
+      "imageHint": "street food"
     },
     {
       "id": "menu-sisig",

@@ -6,17 +6,17 @@ import { Navbar } from '@/components/navbar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Minus, ShoppingCart } from 'lucide-react'
+import { Plus, Minus, ShoppingCart, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { useCart } from '@/components/cart-provider'
 import { toast } from '@/hooks/use-toast'
 
 const MENU_ITEMS = [
-  { id: '1', name: 'Pork Sisig', description: 'Chopped pork ears and jowls with calamansi and chili.', price: 180, category: 'Main', image: 'https://picsum.photos/seed/sisig/400/300' },
-  { id: '2', name: 'Lechon Kawali', description: 'Deep-fried crispy pork belly served with liver sauce.', price: 220, category: 'Main', image: 'https://picsum.photos/seed/lechon/400/300' },
-  { id: '3', name: 'Chicken Inasal', description: 'Bacolod-style grilled chicken marinated in citrus and herbs.', price: 165, category: 'Main', image: 'https://picsum.photos/seed/inasal/400/300' },
-  { id: '4', name: 'Halo-Halo', description: 'The ultimate Filipino shaved ice sundae.', price: 95, category: 'Dessert', image: 'https://picsum.photos/seed/halohalo/400/300' },
-  { id: '5', name: 'Lumpia Shanghai', description: 'Crispy spring rolls filled with savory meat.', price: 120, category: 'Appetizer', image: 'https://picsum.photos/seed/lumpia/400/300' },
+  { id: '1', name: 'Cebu Lechon (1/4 kg)', description: 'The famous Cebuano roasted pig, known for its extra crispy skin and flavorful meat.', price: 250, category: 'Lechon', image: 'https://picsum.photos/seed/lechon/400/300' },
+  { id: '2', name: 'Ginabot (Crispy Chicharon)', description: 'Deep-fried pork mesentery, a Cebuano pungko-pungko favorite.', price: 45, category: 'Street Food', image: 'https://picsum.photos/seed/ginabot/400/300' },
+  { id: '3', name: 'Puso (Hanging Rice)', description: 'Rice boiled in a diamond-shaped casing of woven coconut leaves.', price: 10, category: 'Sides', image: 'https://picsum.photos/seed/puso/400/300' },
+  { id: '4', name: 'Ngohiong', description: 'Cebu\'s unique take on the spring roll, battered and deep-fried.', price: 15, category: 'Appetizer', image: 'https://picsum.photos/seed/ngohiong/400/300' },
+  { id: '5', name: 'Mango Float', description: 'Layered dessert with Cebu\'s famous sweet mangoes, cream, and graham crackers.', price: 120, category: 'Dessert', image: 'https://picsum.photos/seed/mangofloat/400/300' },
 ]
 
 export default function RestaurantDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -44,17 +44,21 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ id:
       <Navbar />
       
       {/* Restaurant Banner */}
-      <div className="relative h-[300px] w-full">
+      <div className="relative h-[350px] w-full">
         <Image 
-          src="https://picsum.photos/seed/restaurant1/1200/600" 
+          src="https://picsum.photos/seed/ceburesto/1200/600" 
           alt="Restaurant Banner" 
           fill 
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-8 text-white">
+        <div className="absolute inset-0 bg-black/50 flex flex-col justify-end p-8 text-white">
           <div className="container mx-auto">
-            <h1 className="text-4xl md:text-5xl font-headline font-bold mb-2">Cebu Lechon House</h1>
-            <p className="text-lg opacity-90 max-w-2xl">Serving the crispest lechon and traditional Cebuano flavors since 1995.</p>
+            <div className="flex items-center gap-2 mb-2">
+              <Badge className="bg-primary hover:bg-primary text-white">Highly Rated</Badge>
+              <span className="text-sm flex items-center gap-1 opacity-80"><MapPin className="h-3 w-3" /> Cebu City, Philippines</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-headline font-bold mb-2">Authentic Cebuano Flavors</h1>
+            <p className="text-lg opacity-90 max-w-2xl">Serving traditional recipes passed down through generations in the heart of Cebu.</p>
           </div>
         </div>
       </div>
@@ -63,12 +67,15 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ id:
         <div className="flex flex-col md:flex-row gap-8">
           {/* Categories Sidebar */}
           <div className="md:w-64 space-y-4">
-            <h3 className="font-bold text-lg mb-4">Categories</h3>
-            <div className="flex flex-col gap-2">
-              <Button variant="ghost" className="justify-start text-primary">All Items</Button>
-              <Button variant="ghost" className="justify-start">Main Dishes</Button>
-              <Button variant="ghost" className="justify-start">Desserts</Button>
-              <Button variant="ghost" className="justify-start">Drinks</Button>
+            <div className="bg-muted/50 p-6 rounded-xl border border-border">
+              <h3 className="font-bold text-lg mb-4">Menu Categories</h3>
+              <div className="flex flex-col gap-1">
+                <Button variant="ghost" className="justify-start text-primary bg-primary/10">Full Menu</Button>
+                <Button variant="ghost" className="justify-start">Signature Lechon</Button>
+                <Button variant="ghost" className="justify-start">Street Food Corner</Button>
+                <Button variant="ghost" className="justify-start">Cebuano Desserts</Button>
+                <Button variant="ghost" className="justify-start">Local Refreshments</Button>
+              </div>
             </div>
           </div>
 
@@ -76,24 +83,24 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ id:
           <div className="flex-1">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {MENU_ITEMS.map((item) => (
-                <Card key={item.id} className="overflow-hidden flex h-40 group">
-                  <div className="relative w-40 h-full shrink-0">
-                    <Image src={item.image} alt={item.name} fill className="object-cover group-hover:scale-105 transition-transform" />
+                <Card key={item.id} className="overflow-hidden flex h-44 group hover:border-primary/50 transition-colors shadow-sm">
+                  <div className="relative w-40 h-full shrink-0 overflow-hidden">
+                    <Image src={item.image} alt={item.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
                   </div>
                   <div className="flex-1 p-4 flex flex-col justify-between">
                     <div>
-                      <div className="flex justify-between items-start">
+                      <div className="flex justify-between items-start mb-1">
                         <h4 className="font-bold text-lg">{item.name}</h4>
                         <span className="text-primary font-bold">₱{item.price}</span>
                       </div>
-                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
                     </div>
                     <Button 
                       size="sm" 
                       className="w-full mt-2" 
                       onClick={() => handleAddToCart(item)}
                     >
-                      <Plus className="h-4 w-4 mr-2" /> Add to Cart
+                      <Plus className="h-4 w-4 mr-2" /> Add to Order
                     </Button>
                   </div>
                 </Card>
