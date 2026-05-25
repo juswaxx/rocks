@@ -14,17 +14,31 @@ import { useRouter } from 'next/navigation'
 import { useToast } from '@/hooks/use-toast'
 import { RESTAURANTS, isRestaurantOpen } from '@/lib/restaurants'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useAuth, useUser, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart } = useCart()
+  const { user } = useUser()
+  const db = useFirestore()
   const [paymentMethod, setPaymentMethod] = useState('cod')
   const [loading, setLoading] = useState(false)
   const [closedRestaurants, setClosedRestaurants] = useState<string[]>([])
+  const [formData, setFormData] = useState({
+    fullName: '',
+    phone: '',
+    address: ''
+  })
   const router = useRouter()
   const { toast } = useToast()
 
   useEffect(() => {
-    // Check if any restaurant in the cart is closed
+    if (user?.displayName && !formData.fullName) {
+      setFormData(prev => ({ ...prev, fullName: user.displayName || '' }))
+    }
+  }, [user, formData.fullName])
+
+  useEffect(() => {
     const closed = items
       .map(item => RESTAURANTS.find(r => r.id === item.restaurantId))
       .filter(r => r && !isRestaurantOpen(r.hours))
@@ -33,9 +47,19 @@ export default function CheckoutPage() {
     setClosedRestaurants(Array.from(new Set(closed)))
   }, [items])
 
-  const handlePlaceOrder = (e: React.FormEvent) => {
+  const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Login Required",
+        description: "Please login to place an order.",
+      })
+      router.push('/login')
+      return
+    }
+
     if (closedRestaurants.length > 0) {
       toast({
         variant: "destructive",
@@ -47,15 +71,51 @@ export default function CheckoutPage() {
 
     setLoading(true)
     
-    // Simulating order processing
-    setTimeout(() => {
-      clearCart()
-      toast({
-        title: "Order Placed Successfully!",
-        description: "Your order has been received. Redirecting to status page...",
+    const orderData = {
+      userId: user.uid,
+      items: items.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        restaurantId: item.restaurantId,
+        imageUrl: item.imageUrl
+      })),
+      totalAmount: totalAmount + 50,
+      status: 'Preparing',
+      paymentMethod: paymentMethod,
+      deliveryAddress: formData.address,
+      customerName: formData.fullName,
+      customerPhone: formData.phone,
+      createdAt: serverTimestamp()
+    }
+
+    const ordersRef = collection(db, 'users', user.uid, 'orders')
+    
+    addDoc(ordersRef, orderData)
+      .then(() => {
+        clearCart()
+        toast({
+          title: "Order Placed Successfully!",
+          description: "Your order has been received. Redirecting to status page...",
+        })
+        router.push('/orders')
       })
-      router.push('/orders')
-    }, 2000)
+      .catch(async (err) => {
+        const permissionError = new FirestorePermissionError({
+          path: ordersRef.path,
+          operation: 'create',
+          requestResourceData: orderData,
+        });
+        errorEmitter.emit('permission-error', permissionError);
+        toast({
+          variant: "destructive",
+          title: "Order Failed",
+          description: "Could not save your order. Please try again.",
+        })
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   const isOrderBlocked = closedRestaurants.length > 0 || items.length === 0
@@ -77,7 +137,6 @@ export default function CheckoutPage() {
         )}
 
         <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Left Column: Details */}
           <div className="space-y-8">
             <section>
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
@@ -87,15 +146,33 @@ export default function CheckoutPage() {
               <div className="grid gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="fullName">Full Name</Label>
-                  <Input id="fullName" placeholder="Juan Dela Cruz" required />
+                  <Input 
+                    id="fullName" 
+                    placeholder="Juan Dela Cruz" 
+                    required 
+                    value={formData.fullName}
+                    onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                  />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" placeholder="0917XXXXXXX" required />
+                  <Input 
+                    id="phone" 
+                    placeholder="0917XXXXXXX" 
+                    required 
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="address">Detailed Address</Label>
-                  <Input id="address" placeholder="Bldg/Street, Barangay, City" required />
+                  <Input 
+                    id="address" 
+                    placeholder="Bldg/Street, Barangay, City" 
+                    required 
+                    value={formData.address}
+                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                  />
                 </div>
               </div>
             </section>
@@ -179,7 +256,6 @@ export default function CheckoutPage() {
             </section>
           </div>
 
-          {/* Right Column: Summary */}
           <div>
             <Card className="sticky top-24">
               <CardHeader>
