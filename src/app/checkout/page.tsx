@@ -33,6 +33,8 @@ export default function CheckoutPage() {
   const router = useRouter()
   const { toast } = useToast()
 
+  const DELIVERY_FEE = 50
+
   useEffect(() => {
     if (user?.displayName && !formData.fullName) {
       setFormData(prev => ({ ...prev, fullName: user.displayName || '' }))
@@ -90,7 +92,7 @@ export default function CheckoutPage() {
         restaurantId: item.restaurantId,
         imageUrl: item.imageUrl
       })),
-      totalAmount: totalAmount + 50, // Subtotal + Delivery Fee
+      totalAmount: totalAmount + DELIVERY_FEE,
       status: 'Preparing',
       paymentMethod: paymentMethod,
       deliveryAddress: formData.address,
@@ -101,15 +103,8 @@ export default function CheckoutPage() {
 
     const ordersRef = collection(db, 'users', user.uid, 'orders')
     
+    // Non-blocking write following guidelines for optimistic UI
     addDoc(ordersRef, orderData)
-      .then(() => {
-        clearCart()
-        toast({
-          title: "Order Placed Successfully!",
-          description: "Your Cebuano feast is on the way!",
-        })
-        router.push('/orders')
-      })
       .catch(async (err) => {
         const permissionError = new FirestorePermissionError({
           path: ordersRef.path,
@@ -117,15 +112,19 @@ export default function CheckoutPage() {
           requestResourceData: orderData,
         });
         errorEmitter.emit('permission-error', permissionError);
-        toast({
-          variant: "destructive",
-          title: "Order Failed",
-          description: "Could not save your order. Please try again.",
-        })
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+      });
+
+    // Proceed immediately leveraging local cache
+    clearCart()
+    toast({
+      title: "Order Placed Successfully!",
+      description: "Your Cebuano feast is on the way!",
+    })
+    
+    // Short delay to ensure toast is seen before navigation
+    setTimeout(() => {
+      router.push('/orders')
+    }, 100)
   }
 
   if (items.length === 0) {
@@ -302,11 +301,11 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Delivery</span>
-                    <span className="text-green-600 font-medium">₱50</span>
+                    <span className="text-green-600 font-medium">₱{DELIVERY_FEE}</span>
                   </div>
                   <div className="flex justify-between text-xl font-bold pt-2">
                     <span>Total Amount</span>
-                    <span className="text-primary">₱{totalAmount + 50}</span>
+                    <span className="text-primary">₱{totalAmount + DELIVERY_FEE}</span>
                   </div>
                 </div>
 

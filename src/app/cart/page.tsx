@@ -12,6 +12,8 @@ import Link from 'next/link'
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalAmount } = useCart()
 
+  const DELIVERY_FEE = 50
+
   if (items.length === 0) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
@@ -86,21 +88,17 @@ export default function CartPage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Delivery Fee</span>
-                    <span className="font-medium text-green-600">FREE</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Service Fee</span>
-                    <span className="font-medium">₱20</span>
+                    <span className="font-medium text-green-600">₱{DELIVERY_FEE}</span>
                   </div>
                   <div className="border-t pt-4 flex justify-between items-baseline">
                     <span className="text-xl font-bold">Total</span>
-                    <span className="text-2xl font-bold text-primary">₱{totalAmount + 20}</span>
+                    <span className="text-2xl font-bold text-primary">₱{totalAmount + DELIVERY_FEE}</span>
                   </div>
                 </div>
                 
                 <div className="mt-6 p-3 bg-primary/5 rounded-lg flex gap-3">
                   <Info className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                  <p className="text-[10px] text-muted-foreground">Order includes a small service fee to support our local Cebuano delivery partners.</p>
+                  <p className="text-[10px] text-muted-foreground">Order includes a small fee to support our local Cebuano delivery partners.</p>
                 </div>
 
                 <Link href="/checkout">
