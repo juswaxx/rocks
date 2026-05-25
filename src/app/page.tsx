@@ -65,25 +65,25 @@ export default function Home() {
       <section className="py-24 bg-white relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-headline font-black mb-4">Why Cebu Chooses Us</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">We're built by locals, for locals. Experience the difference in every bite.</p>
+            <h2 className="text-4xl md:text-5xl font-headline font-black mb-4">Cebu’s Culinary Heritage, <span className="text-primary italic">Redefined.</span></h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">We bridge the gap between generational master chefs and your doorstep. Experience the authentic taste of the island with modern convenience.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[
               { 
                 icon: Utensils, 
                 title: "Curated Lechon Masters", 
-                desc: "We only partner with established names like Rico's, CNT, and House of Lechon." 
+                desc: "We partner exclusively with established icons like Rico's, CNT, and Zubuchon to guarantee true authenticity." 
               },
               { 
                 icon: CreditCard, 
                 title: "Seamless Local Payments", 
-                desc: "Pay via GCash, Maya, or Bank Transfer instantly. No hidden fees, just food." 
+                desc: "Pay instantly via GCash, Maya, or any local bank. Secure, fast, and built for the Cebuano digital lifestyle." 
               },
               { 
                 icon: Clock, 
                 title: "Island-Wide Express", 
-                desc: "Our Cebu-native riders know the shortcuts from IT Park to Banawa like the back of their hand." 
+                desc: "Our native riders navigate Cebu's unique geography with precision, from the port to the highlands." 
               }
             ].map((feature, i) => (
               <div key={i} className="group p-10 rounded-3xl bg-muted/30 border border-transparent hover:border-primary/20 hover:bg-white hover:shadow-2xl transition-all duration-500">
