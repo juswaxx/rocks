@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuth, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
@@ -38,7 +38,7 @@ export default function RegisterPage() {
       const userData = {
         name,
         email,
-        createdAt: new Date().toISOString(),
+        createdAt: serverTimestamp(),
         role: 'user'
       }
 
