@@ -1,12 +1,12 @@
 
 "use client"
 
-import { use } from 'react'
+import { use, useState, useEffect } from 'react'
 import { Navbar } from '@/components/navbar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Minus, ShoppingCart, MapPin } from 'lucide-react'
+import { Plus, Minus, ShoppingCart, MapPin, Clock } from 'lucide-react'
 import Image from 'next/image'
 import { useCart } from '@/components/cart-provider'
 import { toast } from '@/hooks/use-toast'
@@ -22,6 +22,41 @@ const MENU_ITEMS = [
 export default function RestaurantDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const { addItem } = useCart()
+  const [isOpen, setIsOpen] = useState<boolean | null>(null)
+
+  // Mock operating hours for the demo
+  const operatingHours = { open: '10:00', close: '22:00' }
+
+  useEffect(() => {
+    const checkStatus = () => {
+      const now = new Date()
+      const manilaTime = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Asia/Manila',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: false,
+      }).format(now)
+
+      const [currentHour, currentMin] = manilaTime.split(':').map(Number)
+      const currentTimeInMinutes = currentHour * 60 + currentMin
+
+      const [openHour, openMin] = operatingHours.open.split(':').map(Number)
+      const [closeHour, closeMin] = operatingHours.close.split(':').map(Number)
+
+      const openInMins = openHour * 60 + openMin
+      const closeInMins = closeHour * 60 + closeMin
+
+      if (closeInMins < openInMins) {
+        setIsOpen(currentTimeInMinutes >= openInMins || currentTimeInMinutes < closeInMins)
+      } else {
+        setIsOpen(currentTimeInMinutes >= openInMins && currentTimeInMinutes < closeInMins)
+      }
+    }
+
+    checkStatus()
+    const interval = setInterval(checkStatus, 60000)
+    return () => clearInterval(interval)
+  }, [])
 
   const handleAddToCart = (item: any) => {
     addItem({
@@ -55,9 +90,18 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ id:
           <div className="container mx-auto">
             <div className="flex items-center gap-2 mb-2">
               <Badge className="bg-primary hover:bg-primary text-white">Highly Rated</Badge>
+              {isOpen !== null && (
+                <Badge variant={isOpen ? 'default' : 'destructive'} className={isOpen ? 'bg-green-600' : ''}>
+                  {isOpen ? 'Open Now' : 'Closed'}
+                </Badge>
+              )}
               <span className="text-sm flex items-center gap-1 opacity-80"><MapPin className="h-3 w-3" /> Cebu City, Philippines</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-headline font-bold mb-2">Authentic Cebuano Flavors</h1>
+            <div className="flex items-center gap-2 opacity-90 text-sm mb-4">
+              <Clock className="h-4 w-4" />
+              <span>Hours (Manila Time): {operatingHours.open} - {operatingHours.close}</span>
+            </div>
             <p className="text-lg opacity-90 max-w-2xl">Serving traditional recipes passed down through generations in the heart of Cebu.</p>
           </div>
         </div>
@@ -99,8 +143,9 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ id:
                       size="sm" 
                       className="w-full mt-2" 
                       onClick={() => handleAddToCart(item)}
+                      disabled={isOpen === false}
                     >
-                      <Plus className="h-4 w-4 mr-2" /> Add to Order
+                      <Plus className="h-4 w-4 mr-2" /> {isOpen === false ? 'Closed' : 'Add to Order'}
                     </Button>
                   </div>
                 </Card>
