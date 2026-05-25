@@ -1,8 +1,7 @@
-
 "use client"
 
 import Link from 'next/link'
-import { ShoppingCart, User, LogOut, Menu as MenuIcon } from 'lucide-react'
+import { ShoppingCart, User, LogOut, Menu as MenuIcon, LayoutDashboard } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useCart } from '@/components/cart-provider'
 import { Badge } from '@/components/ui/badge'
@@ -13,12 +12,24 @@ import {
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { useState } from 'react'
+import { useUser, useAuth } from '@/firebase'
+import { signOut } from 'firebase/auth'
+import { useRouter } from 'next/navigation'
 
 export function Navbar() {
   const { items } = useCart()
+  const { user, loading } = useUser()
+  const auth = useAuth()
+  const router = useRouter()
+  
   const itemCount = items.reduce((count, item) => count + item.quantity, 0)
-  const [isAdmin, setIsAdmin] = useState(false) // Mocked for UI demo
+
+  const handleLogout = async () => {
+    if (auth) {
+      await signOut(auth)
+      router.push('/')
+    }
+  }
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -29,7 +40,7 @@ export function Navbar() {
           </Link>
           <div className="hidden md:flex gap-4">
             <Link href="/restaurants" className="text-sm font-medium hover:text-primary transition-colors">Restaurants</Link>
-            <Link href="/orders" className="text-sm font-medium hover:text-primary transition-colors">My Orders</Link>
+            {user && <Link href="/orders" className="text-sm font-medium hover:text-primary transition-colors">My Orders</Link>}
           </div>
         </div>
 
@@ -45,30 +56,41 @@ export function Navbar() {
             </Button>
           </Link>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <User className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem asChild>
-                <Link href="/profile">Profile</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/orders">Order History</Link>
-              </DropdownMenuItem>
-              {isAdmin && (
-                <DropdownMenuItem asChild>
-                  <Link href="/admin/dashboard">Admin Dashboard</Link>
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuItem className="text-destructive">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {!loading && (
+            user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem className="font-medium">
+                    {user.displayName || user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/orders">Order History</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin/dashboard" className="flex items-center">
+                      <LayoutDashboard className="mr-2 h-4 w-4" /> Admin Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="text-destructive" onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/login">
+                <Button variant="default" size="sm">Login</Button>
+              </Link>
+            )
+          )}
 
           <Sheet>
             <SheetTrigger asChild className="md:hidden">
@@ -79,12 +101,15 @@ export function Navbar() {
             <SheetContent side="right">
               <div className="flex flex-col gap-4 mt-8">
                 <Link href="/restaurants" className="text-lg font-medium">Browse Restaurants</Link>
-                <Link href="/orders" className="text-lg font-medium">Order History</Link>
+                {user && <Link href="/orders" className="text-lg font-medium">Order History</Link>}
                 <Link href="/cart" className="text-lg font-medium">Shopping Cart ({itemCount})</Link>
-                <Link href="/profile" className="text-lg font-medium">My Profile</Link>
-                <Button className="mt-4" onClick={() => setIsAdmin(!isAdmin)}>
-                  Toggle Mock Admin View
-                </Button>
+                {!user && <Link href="/login" className="text-lg font-medium">Login</Link>}
+                {user && <Link href="/profile" className="text-lg font-medium">My Profile</Link>}
+                {user && (
+                  <Button variant="destructive" className="mt-4" onClick={handleLogout}>
+                    Log out
+                  </Button>
+                )}
               </div>
             </SheetContent>
           </Sheet>
