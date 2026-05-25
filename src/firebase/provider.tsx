@@ -5,6 +5,7 @@ import React, { createContext, useContext } from 'react';
 import { FirebaseApp } from 'firebase/app';
 import { Firestore } from 'firebase/firestore';
 import { Auth } from 'firebase/auth';
+import { FirebaseErrorListener } from '@/components/firebase-error-listener';
 
 interface FirebaseContextType {
   app: FirebaseApp;
@@ -27,6 +28,7 @@ export function FirebaseProvider({
 }) {
   return (
     <FirebaseContext.Provider value={{ app, db, auth }}>
+      <FirebaseErrorListener />
       {children}
     </FirebaseContext.Provider>
   );

@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from 'react'
@@ -6,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { useAuth, useFirestore } from '@/firebase'
+import { useAuth, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
 import { useRouter } from 'next/navigation'
@@ -32,16 +33,27 @@ export default function RegisterPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       const user = userCredential.user
       
-      // Update display name
       await updateProfile(user, { displayName: name })
       
-      // Create user document in Firestore
-      await setDoc(doc(db, 'users', user.uid), {
+      const userData = {
         name,
         email,
         createdAt: new Date().toISOString(),
         role: 'user'
-      })
+      }
+
+      const userDocRef = doc(db, 'users', user.uid);
+      
+      // Non-blocking write following guidelines
+      setDoc(userDocRef, userData)
+        .catch(async (err) => {
+          const permissionError = new FirestorePermissionError({
+            path: userDocRef.path,
+            operation: 'create',
+            requestResourceData: userData,
+          });
+          errorEmitter.emit('permission-error', permissionError);
+        });
 
       toast({
         title: "Registration Successful",
