@@ -12,9 +12,12 @@ import { MapPin, Star, Clock, Bike, Search, SlidersHorizontal } from 'lucide-rea
 import { RESTAURANTS, isRestaurantOpen, format12h } from '@/lib/restaurants'
 import { Input } from '@/components/ui/input'
 
+const QUICK_CATEGORIES = ['All', 'Lechon', 'Seafood', 'BBQ', 'Desserts', 'Street Food', 'Offers']
+
 export default function RestaurantsPage() {
   const [currentStatuses, setCurrentStatuses] = useState<Record<string, boolean>>({})
   const [search, setSearch] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('All')
 
   useEffect(() => {
     const updateStatuses = () => {
@@ -30,10 +33,13 @@ export default function RestaurantsPage() {
     return () => clearInterval(interval)
   }, [])
 
-  const filteredRestaurants = RESTAURANTS.filter(res => 
-    res.name.toLowerCase().includes(search.toLowerCase()) ||
-    res.description.toLowerCase().includes(search.toLowerCase())
-  )
+  const filteredRestaurants = RESTAURANTS.filter(res => {
+    const matchesSearch = res.name.toLowerCase().includes(search.toLowerCase()) ||
+                         res.description.toLowerCase().includes(search.toLowerCase())
+    const matchesCategory = selectedCategory === 'All' || res.categories.includes(selectedCategory)
+    
+    return matchesSearch && matchesCategory
+  })
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -44,8 +50,8 @@ export default function RestaurantsPage() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-headline font-black mb-1">Explore Cebuano Cuisine</h1>
-              <p className="text-sm text-muted-foreground">Found {filteredRestaurants.length} restaurants serving your area</p>
+              <h1 className="text-3xl font-headline font-black mb-1 text-foreground">Explore Cebuano Cuisine</h1>
+              <p className="text-sm text-muted-foreground font-medium">Found {filteredRestaurants.length} restaurants serving your area</p>
             </div>
             
             <div className="flex items-center gap-3 w-full md:max-w-md">
@@ -66,11 +72,14 @@ export default function RestaurantsPage() {
           
           {/* Quick Categories */}
           <div className="flex gap-2 overflow-x-auto pb-2 pt-6 scrollbar-hide">
-            {['All', 'Lechon', 'Seafood', 'BBQ', 'Desserts', 'Street Food', 'Offers'].map(cat => (
+            {QUICK_CATEGORIES.map(cat => (
               <Badge 
                 key={cat} 
-                className={`py-2 px-6 rounded-full cursor-pointer text-xs font-bold transition-all ${
-                  cat === 'All' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-muted text-muted-foreground hover:bg-muted/80 border-none'
+                onClick={() => setSelectedCategory(cat)}
+                className={`py-2 px-6 rounded-full cursor-pointer text-xs font-bold transition-all border-none ${
+                  selectedCategory === cat 
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105' 
+                    : 'bg-muted text-muted-foreground hover:bg-muted/80'
                 }`}
               >
                 {cat}
@@ -102,7 +111,7 @@ export default function RestaurantsPage() {
                         {res.rating}
                       </Badge>
                       {!isChecking && !isOpen && (
-                        <Badge variant="destructive" className="shadow-sm py-1.5 px-3 font-bold text-[10px]">
+                        <Badge variant="destructive" className="shadow-sm py-1.5 px-3 font-bold text-[10px] border-none">
                           Closed
                         </Badge>
                       )}
@@ -118,7 +127,7 @@ export default function RestaurantsPage() {
                   
                   <div className="px-4 py-6">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-2xl font-headline font-black group-hover:text-primary transition-colors">{res.name}</h3>
+                      <h3 className="text-2xl font-headline font-black group-hover:text-primary transition-colors text-foreground">{res.name}</h3>
                     </div>
                     
                     <div className="flex items-center text-xs font-bold text-muted-foreground gap-4">
@@ -127,7 +136,7 @@ export default function RestaurantsPage() {
                       <span className="flex items-center"><MapPin className="h-3.5 w-3.5 mr-1.5 text-muted-foreground/60" /> {res.location}</span>
                     </div>
                     
-                    <p className="mt-3 text-sm text-muted-foreground/80 line-clamp-2 leading-relaxed">{res.description}</p>
+                    <p className="mt-3 text-sm text-muted-foreground/80 line-clamp-2 leading-relaxed font-medium">{res.description}</p>
                   </div>
                 </Card>
               </Link>
@@ -139,8 +148,8 @@ export default function RestaurantsPage() {
           <div className="text-center py-32 bg-muted/20 rounded-[3rem] border border-dashed border-muted">
             <Search className="h-16 w-16 text-muted-foreground mx-auto mb-6 opacity-20" />
             <h3 className="text-2xl font-bold mb-2">No restaurants found</h3>
-            <p className="text-muted-foreground">Try searching for something else like "Lechon" or "BBQ"</p>
-            <Button variant="link" className="mt-4 text-primary font-bold" onClick={() => setSearch('')}>Clear search</Button>
+            <p className="text-muted-foreground font-medium">Try searching for something else or clearing your filters.</p>
+            <Button variant="link" className="mt-4 text-primary font-bold" onClick={() => { setSearch(''); setSelectedCategory('All'); }}>Clear filters</Button>
           </div>
         )}
       </main>

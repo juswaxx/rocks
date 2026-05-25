@@ -17,6 +17,7 @@ export type Restaurant = {
   rating: number
   hours: { open: string; close: string }
   menu: MenuItem[]
+  categories: string[]
 }
 
 export const RESTAURANTS: Restaurant[] = [
@@ -28,6 +29,7 @@ export const RESTAURANTS: Restaurant[] = [
     image: 'https://picsum.photos/seed/lechonhouse/600/400',
     rating: 4.9,
     hours: { open: '10:00', close: '21:00' },
+    categories: ['Lechon'],
     menu: [
       { id: 'clh-1', name: 'Cebu Lechon (1/4 kg)', description: 'Classic Cebuano roasted pig with legendary crispy skin and juicy meat.', price: 250, category: 'Signature Lechon', image: 'https://picsum.photos/seed/lechon1/400/300' },
       { id: 'clh-2', name: 'Cebu Lechon (1/2 kg)', description: 'Perfect for sharing. Served with local soy-vinegar dip.', price: 480, category: 'Signature Lechon', image: 'https://picsum.photos/seed/lechon2/400/300' },
@@ -46,6 +48,7 @@ export const RESTAURANTS: Restaurant[] = [
     image: 'https://picsum.photos/seed/larsian/600/400',
     rating: 4.7,
     hours: { open: '18:00', close: '02:00' },
+    categories: ['BBQ', 'Seafood'],
     menu: [
       { id: 'lbbq-1', name: 'Pork BBQ Stick', description: 'Sweet and savory grilled pork skewers, a Larsian classic.', price: 18, category: 'Grill', image: 'https://picsum.photos/seed/porkbbq/400/300' },
       { id: 'lbbq-2', name: 'Chicken Inasal (Pecho)', description: 'Grilled chicken breast marinated in calamansi and ginger.', price: 135, category: 'Grill', image: 'https://picsum.photos/seed/inasal/400/300' },
@@ -64,6 +67,7 @@ export const RESTAURANTS: Restaurant[] = [
     image: 'https://picsum.photos/seed/pungkopungko/600/400',
     rating: 4.6,
     hours: { open: '06:00', close: '22:00' },
+    categories: ['Street Food'],
     menu: [
       { id: 'ppc-1', name: 'Ginabot (Crispy Intestine)', description: 'The star of Pungko-Pungko. Deep-fried crispy pork mesentery.', price: 45, category: 'Fried Favorites', image: 'https://picsum.photos/seed/ginabot1/400/300' },
       { id: 'ppc-2', name: 'Fried Pork Meat', description: 'Breaded and deep-fried savory pork chunks.', price: 40, category: 'Fried Favorites', image: 'https://picsum.photos/seed/friedpork/400/300' },
@@ -82,6 +86,7 @@ export const RESTAURANTS: Restaurant[] = [
     image: 'https://picsum.photos/seed/zubuchon/600/400',
     rating: 4.8,
     hours: { open: '10:00', close: '21:00' },
+    categories: ['Lechon'],
     menu: [
       { id: 'zb-1', name: 'Zubuchon Lechon (Small)', description: 'Signature roasted pig using only organic ingredients.', price: 390, category: 'Signature Lechon', image: 'https://picsum.photos/seed/zubulechon/400/300' },
       { id: 'zb-2', name: 'Zubuchon Sisig', description: 'Savory chopped lechon with onions and spices on a sizzler.', price: 340, category: 'Cebu Specialties', image: 'https://picsum.photos/seed/sisig/400/300' },
@@ -99,6 +104,7 @@ export const RESTAURANTS: Restaurant[] = [
     image: 'https://picsum.photos/seed/casaverde/600/400',
     rating: 4.5,
     hours: { open: '10:00', close: '22:00' },
+    categories: ['Offers', 'Desserts'],
     menu: [
       { id: 'cv-1', name: 'Brian\'s Ribs', description: 'Baked pork ribs with a sweet and tangy BBQ sauce.', price: 465, category: 'Signature Ribs', image: 'https://picsum.photos/seed/ribs/400/300' },
       { id: 'cv-2', name: 'The Mighty Ton', description: 'A giant burger meant for 4-5 people. A Cebu legend.', price: 895, category: 'Burgers & Steaks', image: 'https://picsum.photos/seed/giantburger/400/300' },
@@ -116,6 +122,7 @@ export const RESTAURANTS: Restaurant[] = [
     image: 'https://picsum.photos/seed/mactanseafood/600/400',
     rating: 4.4,
     hours: { open: '11:00', close: '23:00' },
+    categories: ['Seafood'],
     menu: [
       { id: 'msg-1', name: 'Baked Scallops with Cheese', description: 'Fresh Mactan scallops baked with butter and garlic cheese.', price: 220, category: 'Fresh Catch', image: 'https://picsum.photos/seed/scallops/400/300' },
       { id: 'msg-2', name: 'Crispy Calamares', description: 'Deep-fried squid rings served with spicy mayo dip.', price: 240, category: 'Starters', image: 'https://picsum.photos/seed/squid/400/300' },
