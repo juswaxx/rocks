@@ -1,20 +1,44 @@
 
 "use client"
 
+import { useState } from 'react'
 import { Navbar } from '@/components/navbar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ChevronRight, Package, Clock, CheckCircle2, XCircle, ShoppingBag, MapPin, Calendar } from 'lucide-react'
+import { 
+  ChevronRight, 
+  Package, 
+  Clock, 
+  CheckCircle2, 
+  XCircle, 
+  ShoppingBag, 
+  MapPin, 
+  Calendar, 
+  Receipt, 
+  Printer, 
+  User, 
+  Phone, 
+  CreditCard 
+} from 'lucide-react'
 import Link from 'next/link'
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase'
 import { collection, query, orderBy } from 'firebase/firestore'
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Separator } from '@/components/ui/separator'
 
 export default function OrdersPage() {
   const { user, loading: userLoading } = useUser()
   const db = useFirestore()
+  const [selectedOrder, setSelectedOrder] = useState<any>(null)
 
   const ordersQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -46,7 +70,7 @@ export default function OrdersPage() {
       <div className="min-h-screen bg-background">
         <Navbar />
         <main className="container mx-auto px-4 py-16 max-w-4xl">
-          <h1 className="text-5xl font-headline font-black italic mb-12">My Orders</h1>
+          <h1 className="text-5xl font-headline font-black italic mb-12 text-foreground">Order History</h1>
           <div className="space-y-8">
             {[1, 2, 3].map(i => (
               <Card key={i} className="animate-pulse rounded-[2.5rem] border-none shadow-soft">
@@ -81,7 +105,7 @@ export default function OrdersPage() {
       <Navbar />
       <main className="container mx-auto px-4 py-16 max-w-4xl">
         <div className="mb-12">
-           <h1 className="text-5xl font-headline font-black italic mb-2">Order History</h1>
+           <h1 className="text-5xl font-headline font-black italic mb-2 text-foreground">Order History</h1>
            <p className="text-muted-foreground font-medium">Relive your favorite Cebuano moments</p>
         </div>
         
@@ -98,7 +122,7 @@ export default function OrdersPage() {
                         </div>
                         <div>
                           <div className="flex flex-wrap items-center gap-4 mb-2">
-                            <span className="text-2xl font-black font-mono tracking-tighter uppercase italic">Order #{order.id.substring(0, 6)}</span>
+                            <span className="text-2xl font-black font-mono tracking-tighter uppercase italic text-foreground">Order #{order.id.substring(0, 6)}</span>
                             <Badge className={cn(
                               "px-4 py-1 rounded-full font-bold uppercase text-[10px] tracking-widest text-white border-none",
                               order.status === 'Completed' ? 'bg-green-500' : 
@@ -146,9 +170,116 @@ export default function OrdersPage() {
                        <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                        <span className="text-xs font-black uppercase tracking-widest opacity-80">Track Status</span>
                     </div>
-                    <Button variant="link" size="sm" className="h-auto text-primary font-black uppercase tracking-widest text-[10px] hover:no-underline group p-0">
-                      Receipt Details <ChevronRight className="ml-2 h-3 w-3 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button 
+                          variant="link" 
+                          size="sm" 
+                          className="h-auto text-primary font-black uppercase tracking-widest text-[10px] hover:no-underline group p-0"
+                          onClick={() => setSelectedOrder(order)}
+                        >
+                          Receipt Details <ChevronRight className="ml-2 h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-md bg-white rounded-[3rem] p-0 overflow-hidden border-none shadow-2xl">
+                        {selectedOrder && (
+                          <div className="p-8 flex flex-col items-center">
+                            <DialogHeader className="w-full text-center mb-6">
+                              <DialogTitle className="text-center font-headline font-black italic text-3xl text-primary mb-2">Puff N' Plate Cebu</DialogTitle>
+                              <p className="text-xs text-muted-foreground font-bold uppercase tracking-[0.2em]">Official E-Receipt</p>
+                            </DialogHeader>
+
+                            <div className="w-full bg-muted/30 rounded-3xl p-6 mb-6 font-mono text-xs space-y-3">
+                               <div className="flex justify-between">
+                                  <span className="text-muted-foreground">Order ID</span>
+                                  <span className="font-bold uppercase">#{selectedOrder.id.substring(0, 8)}</span>
+                               </div>
+                               <div className="flex justify-between">
+                                  <span className="text-muted-foreground">Date</span>
+                                  <span className="font-bold">{formatDate(selectedOrder.createdAt)}</span>
+                               </div>
+                               <div className="flex justify-between">
+                                  <span className="text-muted-foreground">Status</span>
+                                  <span className="font-bold uppercase text-primary">{selectedOrder.status}</span>
+                               </div>
+                            </div>
+
+                            <div className="w-full space-y-4 mb-6">
+                               <div className="flex items-start gap-3">
+                                  <User className="h-4 w-4 text-primary mt-1" />
+                                  <div>
+                                     <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Customer</p>
+                                     <p className="text-sm font-bold">{selectedOrder.customerName || 'N/A'}</p>
+                                  </div>
+                               </div>
+                               <div className="flex items-start gap-3">
+                                  <Phone className="h-4 w-4 text-primary mt-1" />
+                                  <div>
+                                     <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Contact</p>
+                                     <p className="text-sm font-bold">{selectedOrder.customerPhone || 'N/A'}</p>
+                                  </div>
+                               </div>
+                               <div className="flex items-start gap-3">
+                                  <MapPin className="h-4 w-4 text-primary mt-1" />
+                                  <div>
+                                     <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Deliver To</p>
+                                     <p className="text-xs font-medium leading-relaxed">{selectedOrder.deliveryAddress}</p>
+                                  </div>
+                               </div>
+                            </div>
+
+                            <Separator className="mb-6" />
+
+                            <div className="w-full space-y-3 mb-6">
+                               {selectedOrder.items?.map((item: any, i: number) => (
+                                 <div key={i} className="flex justify-between items-center text-sm">
+                                    <span className="text-muted-foreground">
+                                       <span className="font-bold text-foreground">{item.quantity}x</span> {item.name}
+                                    </span>
+                                    <span className="font-bold">₱{item.price * item.quantity}</span>
+                                 </div>
+                               ))}
+                            </div>
+
+                            <div className="w-full bg-primary/5 rounded-2xl p-5 space-y-2 mb-8">
+                               <div className="flex justify-between text-xs">
+                                  <span className="text-muted-foreground">Subtotal</span>
+                                  <span className="font-bold">₱{selectedOrder.totalAmount - 50}</span>
+                               </div>
+                               <div className="flex justify-between text-xs">
+                                  <span className="text-muted-foreground">Delivery Fee</span>
+                                  <span className="font-bold">₱50</span>
+                               </div>
+                               <Separator className="my-2 bg-primary/10" />
+                               <div className="flex justify-between items-baseline">
+                                  <span className="text-sm font-black uppercase italic">Total Paid</span>
+                                  <span className="text-2xl font-black text-primary italic">₱{selectedOrder.totalAmount}</span>
+                               </div>
+                            </div>
+
+                            <div className="w-full flex items-center justify-between mb-8 p-4 border border-dashed rounded-xl bg-muted/10">
+                               <div className="flex items-center gap-3">
+                                  <CreditCard className="h-5 w-5 text-primary" />
+                                  <span className="text-xs font-bold uppercase tracking-widest">{selectedOrder.paymentMethod}</span>
+                               </div>
+                               <Badge variant="outline" className="bg-white border-primary/20 text-primary font-bold text-[10px]">VERIFIED</Badge>
+                            </div>
+
+                            <div className="flex gap-3 w-full">
+                               <Button className="flex-1 rounded-xl font-bold h-12" onClick={() => window.print()}>
+                                  <Printer className="mr-2 h-4 w-4" /> Print Receipt
+                               </Button>
+                               <Button variant="outline" className="flex-1 rounded-xl font-bold h-12">
+                                  Support
+                               </Button>
+                            </div>
+                            <p className="mt-8 text-[9px] text-muted-foreground uppercase font-black tracking-[0.3em] text-center">
+                               Thank you for choosing Puff N' Plate Cebu!
+                            </p>
+                          </div>
+                        )}
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </CardContent>
               </Card>
