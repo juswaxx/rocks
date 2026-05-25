@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Navbar } from '@/components/navbar'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -6,8 +8,10 @@ import Image from 'next/image'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
 import { ArrowRight, Utensils, CreditCard, Clock, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { useUser } from '@/firebase'
 
 export default function Home() {
+  const { user } = useUser()
   const heroImg = PlaceHolderImages.find(img => img.id === 'hero-bg')
   const haloHaloImg = PlaceHolderImages.find(img => img.id === 'menu-halo-halo')?.imageUrl || 'https://picsum.photos/seed/halohalo/800/600'
   
@@ -40,11 +44,13 @@ export default function Home() {
                   Start Ordering <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link href="/register">
-                <Button size="lg" variant="outline" className="h-16 px-10 rounded-2xl text-xl font-bold bg-white/5 backdrop-blur-xl border-white/20 text-white hover:bg-white/20 transition-all">
-                  Sign Up Free
-                </Button>
-              </Link>
+              {!user && (
+                <Link href="/register">
+                  <Button size="lg" variant="outline" className="h-16 px-10 rounded-2xl text-xl font-bold bg-white/5 backdrop-blur-xl border-white/20 text-white hover:bg-white/20 transition-all">
+                    Sign Up Free
+                  </Button>
+                </Link>
+              )}
             </div>
             
             <div className="mt-16 flex items-center gap-8 text-white/60">
