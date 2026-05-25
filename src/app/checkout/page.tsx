@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Navbar } from '@/components/navbar'
 import { useCart } from '@/components/cart-provider'
 import { Button } from '@/components/ui/button'
@@ -9,18 +9,42 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Wallet, Landmark, Truck, Upload } from 'lucide-react'
+import { Wallet, Landmark, Truck, Upload, AlertCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { toast } from '@/hooks/use-toast'
+import { useToast } from '@/hooks/use-toast'
+import { RESTAURANTS, isRestaurantOpen } from '@/lib/restaurants'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart } = useCart()
   const [paymentMethod, setPaymentMethod] = useState('cod')
   const [loading, setLoading] = useState(false)
+  const [closedRestaurants, setClosedRestaurants] = useState<string[]>([])
   const router = useRouter()
+  const { toast } = useToast()
+
+  useEffect(() => {
+    // Check if any restaurant in the cart is closed
+    const closed = items
+      .map(item => RESTAURANTS.find(r => r.id === item.restaurantId))
+      .filter(r => r && !isRestaurantOpen(r.hours))
+      .map(r => r!.name)
+    
+    setClosedRestaurants(Array.from(new Set(closed)))
+  }, [items])
 
   const handlePlaceOrder = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (closedRestaurants.length > 0) {
+      toast({
+        variant: "destructive",
+        title: "Cannot Place Order",
+        description: `The following restaurants are currently closed: ${closedRestaurants.join(', ')}. Please remove items from these restaurants to continue.`,
+      })
+      return
+    }
+
     setLoading(true)
     
     // Simulating order processing
@@ -34,12 +58,24 @@ export default function CheckoutPage() {
     }, 2000)
   }
 
+  const isOrderBlocked = closedRestaurants.length > 0 || items.length === 0
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="container mx-auto px-4 py-12 max-w-5xl">
         <h1 className="text-3xl font-headline font-bold mb-8">Checkout</h1>
         
+        {closedRestaurants.length > 0 && (
+          <Alert variant="destructive" className="mb-8">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Action Required</AlertTitle>
+            <AlertDescription>
+              Some restaurants in your cart are now closed: <strong>{closedRestaurants.join(', ')}</strong>. You cannot place an order until these items are removed.
+            </AlertDescription>
+          </Alert>
+        )}
+
         <form onSubmit={handlePlaceOrder} className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left Column: Details */}
           <div className="space-y-8">
@@ -177,8 +213,8 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-lg" disabled={loading}>
-                  {loading ? 'Processing...' : 'Place Order'}
+                <Button type="submit" className="w-full h-12 text-lg" disabled={loading || isOrderBlocked}>
+                  {loading ? 'Processing...' : isOrderBlocked ? 'Ordering Blocked' : 'Place Order'}
                 </Button>
                 <p className="text-[10px] text-center text-muted-foreground">
                   By placing your order, you agree to Puff N&apos; Plate&apos;s Terms of Service and Privacy Policy.
