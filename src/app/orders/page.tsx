@@ -5,11 +5,12 @@ import { Navbar } from '@/components/navbar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ChevronRight, Package, Clock, CheckCircle2, XCircle, ShoppingBag, MapPin, Receipt, Calendar } from 'lucide-react'
+import { ChevronRight, Package, Clock, CheckCircle2, XCircle, ShoppingBag, MapPin, Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase'
 import { collection, query, orderBy } from 'firebase/firestore'
 import { format } from 'date-fns'
+import { cn } from '@/lib/utils'
 
 export default function OrdersPage() {
   const { user, loading: userLoading } = useUser()
@@ -99,7 +100,7 @@ export default function OrdersPage() {
                           <div className="flex flex-wrap items-center gap-4 mb-2">
                             <span className="text-2xl font-black font-mono tracking-tighter uppercase italic">Order #{order.id.substring(0, 6)}</span>
                             <Badge className={cn(
-                              "px-4 py-1 rounded-full font-bold uppercase text-[10px] tracking-widest",
+                              "px-4 py-1 rounded-full font-bold uppercase text-[10px] tracking-widest text-white border-none",
                               order.status === 'Completed' ? 'bg-green-500' : 
                               order.status === 'Cancelled' ? 'bg-destructive' : 'bg-yellow-500'
                             )}>
@@ -115,7 +116,7 @@ export default function OrdersPage() {
                       <div className="text-right">
                         <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest mb-1">Total Paid</p>
                         <p className="text-4xl font-black text-primary italic">₱{order.totalAmount}</p>
-                        <Badge variant="outline" className="mt-2 rounded-full border-muted text-muted-foreground font-bold">{order.paymentMethod.toUpperCase()}</Badge>
+                        <Badge variant="outline" className="mt-2 rounded-full border-muted text-muted-foreground font-bold">{order.paymentMethod?.toUpperCase()}</Badge>
                       </div>
                     </div>
 

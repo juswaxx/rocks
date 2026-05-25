@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
-import { ArrowRight, Utensils, CreditCard, Clock, Star, MapPin, ChevronRight } from 'lucide-react'
+import { ArrowRight, Utensils, CreditCard, Clock, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
 export default function Home() {

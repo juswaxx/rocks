@@ -20,12 +20,11 @@ import {
 } from 'lucide-react'
 import { 
   ChartContainer, 
-  ChartTooltip, 
-  ChartTooltipContent 
 } from '@/components/ui/chart'
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid } from 'recharts'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
 const STATS = [
   { label: 'Total Revenue', value: '₱128,450', change: '+12.5%', trend: 'up', icon: TrendingUp, color: 'text-green-500', bg: 'bg-green-500/10' },
@@ -132,19 +131,24 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent className="p-10">
                 <div className="h-[400px]">
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ChartContainer config={{
+                    total: {
+                      label: "Revenue",
+                      color: "hsl(var(--primary))",
+                    },
+                  }}>
                     <BarChart data={CHART_DATA}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--muted))" />
                       <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} dy={10} />
                       <YAxis fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₱${v}`} />
                       <Bar 
                         dataKey="total" 
-                        fill="hsl(var(--primary))" 
+                        fill="var(--color-total)" 
                         radius={[8, 8, 0, 0]} 
                         barSize={40}
                       />
                     </BarChart>
-                  </ResponsiveContainer>
+                  </ChartContainer>
                 </div>
               </CardContent>
             </Card>
