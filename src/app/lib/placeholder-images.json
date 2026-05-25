@@ -8,28 +8,76 @@
       "imageHint": "cebu lechon"
     },
     {
-      "id": "restaurant-cebu-lechon",
-      "description": "Authentic Cebu Lechon",
+      "id": "res-lechon-house",
+      "description": "Cebu Lechon House storefront",
       "imageUrl": "https://picsum.photos/seed/lechonhouse/600/400",
       "imageHint": "roasted pig"
     },
     {
-      "id": "restaurant-larsian",
-      "description": "Larsian BBQ Grill",
+      "id": "res-larsian",
+      "description": "Larsian BBQ Grill vibe",
       "imageUrl": "https://picsum.photos/seed/larsian/600/400",
       "imageHint": "filipino bbq"
     },
     {
-      "id": "restaurant-pungko",
-      "description": "Pungko-Pungko Central",
+      "id": "res-pungko",
+      "description": "Pungko-Pungko Central fried items",
       "imageUrl": "https://picsum.photos/seed/pungkopungko/600/400",
       "imageHint": "street food"
     },
     {
-      "id": "menu-sisig",
-      "description": "Pork Sisig",
-      "imageUrl": "https://picsum.photos/seed/sisig/400/300",
-      "imageHint": "pork sisig"
+      "id": "res-zubuchon",
+      "description": "Zubuchon modern interior",
+      "imageUrl": "https://picsum.photos/seed/zubuchon/600/400",
+      "imageHint": "modern restaurant"
+    },
+    {
+      "id": "res-casaverde",
+      "description": "Casa Verde classic facade",
+      "imageUrl": "https://picsum.photos/seed/casaverde/600/400",
+      "imageHint": "american diner"
+    },
+    {
+      "id": "res-mactanseaside",
+      "description": "Mactan Seaside Grill view",
+      "imageUrl": "https://picsum.photos/seed/mactanseafood/600/400",
+      "imageHint": "seaside grill"
+    },
+    {
+      "id": "menu-lechon-1",
+      "description": "Lechon 1/4 kg",
+      "imageUrl": "https://picsum.photos/seed/lechon1/400/300",
+      "imageHint": "roasted pork"
+    },
+    {
+      "id": "menu-lechon-2",
+      "description": "Lechon 1/2 kg",
+      "imageUrl": "https://picsum.photos/seed/lechon2/400/300",
+      "imageHint": "crispy pork"
+    },
+    {
+      "id": "menu-paksiw",
+      "description": "Lechon Paksiw",
+      "imageUrl": "https://picsum.photos/seed/paksiw/400/300",
+      "imageHint": "meat stew"
+    },
+    {
+      "id": "menu-dinuguan",
+      "description": "Pork Dinuguan",
+      "imageUrl": "https://picsum.photos/seed/dinuguan/400/300",
+      "imageHint": "black stew"
+    },
+    {
+      "id": "menu-puso",
+      "description": "Puso Hanging Rice",
+      "imageUrl": "https://picsum.photos/seed/puso1/400/300",
+      "imageHint": "woven rice"
+    },
+    {
+      "id": "menu-bbq-pork",
+      "description": "Pork BBQ Stick",
+      "imageUrl": "https://picsum.photos/seed/porkbbq/400/300",
+      "imageHint": "pork skewer"
     },
     {
       "id": "menu-inasal",
@@ -38,10 +86,46 @@
       "imageHint": "grilled chicken"
     },
     {
+      "id": "menu-chorizo",
+      "description": "Chorizo de Cebu",
+      "imageUrl": "https://picsum.photos/seed/chorizo/400/300",
+      "imageHint": "sausage skewer"
+    },
+    {
+      "id": "menu-ginabot",
+      "description": "Ginabot Crispy Intestine",
+      "imageUrl": "https://picsum.photos/seed/ginabot1/400/300",
+      "imageHint": "fried food"
+    },
+    {
+      "id": "menu-ngohiong",
+      "description": "Cebuano Ngohiong",
+      "imageUrl": "https://picsum.photos/seed/ngohiong1/400/300",
+      "imageHint": "spring roll"
+    },
+    {
+      "id": "menu-ribs",
+      "description": "Brian's Ribs",
+      "imageUrl": "https://picsum.photos/seed/ribs/400/300",
+      "imageHint": "pork ribs"
+    },
+    {
+      "id": "menu-scallops",
+      "description": "Grilled Scallops",
+      "imageUrl": "https://picsum.photos/seed/scallops/400/300",
+      "imageHint": "seafood scallops"
+    },
+    {
       "id": "menu-halo-halo",
       "description": "Halo-Halo",
       "imageUrl": "https://picsum.photos/seed/halohalo/400/300",
       "imageHint": "filipino dessert"
+    },
+    {
+      "id": "menu-mango-shake",
+      "description": "Mango Shake",
+      "imageUrl": "https://picsum.photos/seed/mango/400/300",
+      "imageHint": "mango smoothie"
     }
   ]
 }
