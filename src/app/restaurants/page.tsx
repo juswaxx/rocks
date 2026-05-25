@@ -12,7 +12,7 @@ import { MapPin, Star, Clock, Bike, Search, SlidersHorizontal } from 'lucide-rea
 import { RESTAURANTS, isRestaurantOpen, format12h } from '@/lib/restaurants'
 import { Input } from '@/components/ui/input'
 
-const QUICK_CATEGORIES = ['All', 'Lechon', 'Seafood', 'BBQ', 'Desserts', 'Street Food', 'Offers']
+const QUICK_CATEGORIES = ['All', 'Lechon', 'Seafood', 'BBQ', 'Desserts', 'Street Food']
 
 export default function RestaurantsPage() {
   const [currentStatuses, setCurrentStatuses] = useState<Record<string, boolean>>({})
