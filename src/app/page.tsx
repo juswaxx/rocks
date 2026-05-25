@@ -4,112 +4,180 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
-import { ArrowRight, Utensils, CreditCard, Clock } from 'lucide-react'
+import { ArrowRight, Utensils, CreditCard, Clock, Star, MapPin } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 export default function Home() {
   const heroImg = PlaceHolderImages.find(img => img.id === 'hero-bg')
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative h-[600px] flex items-center justify-center text-white text-center overflow-hidden">
+      <section className="relative h-[85vh] flex items-center overflow-hidden">
         <Image 
           src={heroImg?.imageUrl || 'https://picsum.photos/seed/cebufood/1200/600'} 
           alt="Cebuano Cuisine" 
           fill
-          className="object-cover brightness-50"
+          className="object-cover brightness-[0.4] scale-105"
+          priority
           data-ai-hint="cebu lechon"
         />
         <div className="relative z-10 container mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6">Puff N&apos; Plate Cebu</h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
-            Experience the authentic taste of the Queen City of the South, delivered right to your doorstep.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/restaurants">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8">
-                Explore Cebu Flavors <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link href="/register">
-              <Button size="lg" variant="outline" className="text-lg px-8 bg-white/10 backdrop-blur hover:bg-white/20">
-                Join the Cebu Foodie Club
-              </Button>
-            </Link>
+          <div className="max-w-3xl">
+            <Badge className="mb-6 py-1.5 px-4 bg-primary text-white text-sm uppercase tracking-widest font-bold border-none">Cebu's #1 Delivery</Badge>
+            <h1 className="text-6xl md:text-8xl font-headline font-black text-white mb-8 leading-[1.1]">
+              The Queen City's <span className="text-primary italic">Best Flavors</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-xl leading-relaxed">
+              From legendary lechon to sweet Mactan mangoes, we bring the soul of Cebuano cuisine straight to your door.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6">
+              <Link href="/restaurants">
+                <Button size="lg" className="h-16 px-10 rounded-2xl text-xl font-bold shadow-2xl shadow-primary/40 group">
+                  Start Ordering <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="lg" variant="outline" className="h-16 px-10 rounded-2xl text-xl font-bold bg-white/5 backdrop-blur-xl border-white/20 text-white hover:bg-white/20 transition-all">
+                  Sign Up Free
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="mt-16 flex items-center gap-8 text-white/60">
+              <div className="flex -space-x-3">
+                {[1,2,3,4].map(i => (
+                  <div key={i} className="h-12 w-12 rounded-full border-2 border-background bg-muted overflow-hidden">
+                    <Image src={`https://picsum.photos/seed/user${i}/100/100`} alt="User" width={48} height={48} />
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm font-medium">Joined by <span className="text-white font-bold">12,000+</span> Cebuano foodies</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Badges */}
+      <section className="py-12 border-b bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-between items-center gap-8 opacity-40 grayscale">
+            <div className="text-2xl font-black italic">GRAB FOOD</div>
+            <div className="text-2xl font-black italic">FOODPANDA</div>
+            <div className="text-2xl font-black italic">CEBU DAILY</div>
+            <div className="text-2xl font-black italic">SUNDAY POST</div>
+            <div className="text-2xl font-black italic">ISLAND LIFE</div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-headline font-bold mb-16">Why Cebu Loves Puff N&apos; Plate</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="flex flex-col items-center">
-              <div className="h-16 w-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6">
-                <Utensils className="h-8 w-8" />
+      <section className="py-24 bg-white relative overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-headline font-black mb-4">Why Cebu Chooses Us</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">We're built by locals, for locals. Experience the difference in every bite.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              { 
+                icon: Utensils, 
+                title: "Curated Lechon Masters", 
+                desc: "We only partner with established names like Rico's, CNT, and House of Lechon." 
+              },
+              { 
+                icon: CreditCard, 
+                title: "Seamless Local Payments", 
+                desc: "Pay via GCash, Maya, or Bank Transfer instantly. No hidden fees, just food." 
+              },
+              { 
+                icon: Clock, 
+                title: "Island-Wide Express", 
+                desc: "Our Cebu-native riders know the shortcuts from IT Park to Banawa like the back of their hand." 
+              }
+            ].map((feature, i) => (
+              <div key={i} className="group p-10 rounded-3xl bg-muted/30 border border-transparent hover:border-primary/20 hover:bg-white hover:shadow-2xl transition-all duration-500">
+                <div className="h-16 w-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all">
+                  <feature.icon className="h-8 w-8" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
               </div>
-              <h3 className="text-xl font-bold mb-4">The Best Lechon</h3>
-              <p className="text-muted-foreground">We partner with the most legendary Lechon houses in Cebu City and Talisay.</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="h-16 w-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6">
-                <CreditCard className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-4">Cashless in Cebu</h3>
-              <p className="text-muted-foreground">Pay via GCash or Bank Transfer seamlessly. COD also available for your convenience.</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="h-16 w-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6">
-                <Clock className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-4">Island-Wide Speed</h3>
-              <p className="text-muted-foreground">From Mactan to IT Park, we ensure your food arrives hot and fresh.</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Categories / Teaser Section */}
-      <section className="py-20 bg-muted/30">
+      {/* High-Impact Teaser */}
+      <section className="py-24 bg-muted/50">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="flex-1">
-              <h2 className="text-4xl font-headline font-bold mb-6">Craving Mango Float?</h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Cebu is known for the sweetest mangoes in the world. Enjoy our selection of mango-based desserts and classic Halo-Halo.
+          <div className="bg-foreground rounded-[3rem] p-12 md:p-20 overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block">
+              <Image 
+                src={PlaceHolderImages.find(img => img.id === 'menu-halo-halo')?.imageUrl || ''} 
+                alt="Halo Halo" 
+                fill 
+                className="object-cover opacity-60 mix-blend-overlay"
+              />
+              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-foreground/50 to-foreground" />
+            </div>
+            <div className="relative z-10 max-w-xl">
+              <h2 className="text-5xl md:text-6xl font-headline font-black text-white mb-8 leading-tight">Craving the Sweetest <span className="text-primary italic">Cebu Mangoes?</span></h2>
+              <p className="text-xl text-white/60 mb-12">
+                It's not just food, it's a Cebuano ritual. Get the world's best mangoes and classic desserts delivered within 30 minutes.
               </p>
               <Link href="/restaurants">
-                <Button variant="link" className="text-primary text-lg font-bold p-0">
-                  Browse Cebuano Desserts <ArrowRight className="ml-2 h-5 w-5" />
+                <Button className="h-16 px-10 rounded-2xl text-xl font-bold shadow-xl shadow-black/20">
+                  Order Desserts Now
                 </Button>
               </Link>
             </div>
-            <div className="flex-1 relative h-[400px] w-full rounded-2xl overflow-hidden shadow-2xl">
-              <Image 
-                src={PlaceHolderImages.find(img => img.id === 'menu-halo-halo')?.imageUrl || 'https://picsum.photos/seed/halohalo/400/300'} 
-                alt="Halo Halo" 
-                fill
-                className="object-cover"
-                data-ai-hint="filipino dessert"
-              />
-            </div>
           </div>
         </div>
       </section>
 
-      <footer className="mt-auto py-12 bg-foreground text-background">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-2xl font-headline mb-4">Puff N&apos; Plate Cebu</p>
-          <p className="opacity-60 mb-8">Serving the heart of Cebu with every plate.</p>
-          <div className="flex justify-center gap-6 mb-8">
-            <Link href="#" className="hover:text-primary">Our Story</Link>
-            <Link href="#" className="hover:text-primary">Cebu Support</Link>
-            <Link href="#" className="hover:text-primary">Privacy Policy</Link>
+      <footer className="py-20 bg-foreground text-background">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div className="col-span-1 md:col-span-2">
+              <p className="text-3xl font-headline font-black italic text-primary mb-6">Puff N' Plate Cebu</p>
+              <p className="text-white/40 max-w-sm mb-8">Bringing the authentic culinary heritage of Cebu to your doorstep since 2024. Quality you can taste, speed you can trust.</p>
+              <div className="flex gap-4">
+                {[1,2,3,4].map(i => (
+                  <div key={i} className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-pointer">
+                    <span className="text-sm font-bold">F{i}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="font-bold mb-6 text-white uppercase text-xs tracking-widest">Company</h4>
+              <ul className="space-y-4 text-white/40 text-sm">
+                <li><Link href="#" className="hover:text-primary transition-colors">Our Story</Link></li>
+                <li><Link href="#" className="hover:text-primary transition-colors">Cebu Support</Link></li>
+                <li><Link href="#" className="hover:text-primary transition-colors">Be a Rider</Link></li>
+                <li><Link href="#" className="hover:text-primary transition-colors">Partner with Us</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-6 text-white uppercase text-xs tracking-widest">Legal</h4>
+              <ul className="space-y-4 text-white/40 text-sm">
+                <li><Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link></li>
+                <li><Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
+                <li><Link href="#" className="hover:text-primary transition-colors">Cookie Policy</Link></li>
+              </ul>
+            </div>
           </div>
-          <p className="text-sm opacity-40">&copy; 2024 Puff N&apos; Plate Cebu. All rights reserved.</p>
+          <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-sm text-white/20">&copy; 2024 Puff N' Plate Cebu. All rights reserved.</p>
+            <div className="flex items-center gap-6">
+              <div className="h-6 w-10 bg-white/5 rounded border border-white/10" />
+              <div className="h-6 w-10 bg-white/5 rounded border border-white/10" />
+              <div className="h-6 w-10 bg-white/5 rounded border border-white/10" />
+            </div>
+          </div>
         </div>
       </footer>
     </div>

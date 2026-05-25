@@ -5,26 +5,26 @@
 
 @layer base {
   :root {
-    --background: 17 60% 98%;
-    --foreground: 18 41% 13%;
+    --background: 30 40% 98%;
+    --foreground: 20 50% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 18 41% 13%;
+    --card-foreground: 20 50% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 18 41% 13%;
-    --primary: 19 90% 63%;
+    --popover-foreground: 20 50% 10%;
+    --primary: 15 85% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 19 20% 90%;
-    --secondary-foreground: 18 41% 13%;
-    --muted: 19 20% 94%;
-    --muted-foreground: 18 10% 40%;
-    --accent: 354 71% 45%;
+    --secondary: 30 20% 94%;
+    --secondary-foreground: 20 50% 10%;
+    --muted: 30 10% 96%;
+    --muted-foreground: 20 10% 45%;
+    --accent: 354 75% 45%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 19 20% 90%;
-    --input: 19 20% 90%;
-    --ring: 19 90% 63%;
-    --radius: 0.75rem;
+    --border: 30 10% 90%;
+    --input: 30 10% 90%;
+    --ring: 15 85% 55%;
+    --radius: 1rem;
   }
 }
 
@@ -36,6 +36,18 @@
     @apply bg-background text-foreground font-body;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-headline;
+    @apply font-headline tracking-tight;
   }
+}
+
+.glass {
+  @apply bg-white/80 backdrop-blur-md border border-white/20;
+}
+
+.shadow-soft {
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-hover {
+  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
 }
