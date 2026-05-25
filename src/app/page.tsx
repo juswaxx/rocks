@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
-import { ArrowRight, Utensils, CreditCard, Clock, ChevronRight } from 'lucide-react'
+import { ArrowRight, Utensils, CreditCard, Clock, ChevronRight, Facebook, Instagram, Twitter, Youtube } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useUser } from '@/firebase'
 
@@ -138,11 +138,18 @@ export default function Home() {
               <p className="text-3xl font-headline font-black italic text-primary mb-6">Puff N' Plate Cebu</p>
               <p className="text-white/40 max-w-sm mb-8">Bringing the authentic culinary heritage of Cebu to your doorstep since 2026. Quality you can taste, speed you can trust.</p>
               <div className="flex gap-4">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-pointer">
-                    <span className="text-sm font-bold">F{i}</span>
-                  </div>
-                ))}
+                <div className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-pointer group">
+                  <Facebook className="h-5 w-5 text-white/60 group-hover:text-white" />
+                </div>
+                <div className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-pointer group">
+                  <Instagram className="h-5 w-5 text-white/60 group-hover:text-white" />
+                </div>
+                <div className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-pointer group">
+                  <Twitter className="h-5 w-5 text-white/60 group-hover:text-white" />
+                </div>
+                <div className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors cursor-pointer group">
+                  <Youtube className="h-5 w-5 text-white/60 group-hover:text-white" />
+                </div>
               </div>
             </div>
             <div>
