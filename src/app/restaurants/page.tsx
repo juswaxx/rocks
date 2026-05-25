@@ -104,9 +104,16 @@ export default function RestaurantsPage() {
     }
 
     updateStatuses()
-    const interval = setInterval(updateStatuses, 60000) // Update every minute
+    const interval = setInterval(updateStatuses, 60000)
     return () => clearInterval(interval)
   }, [])
+
+  const format12h = (time24: string) => {
+    const [hours, minutes] = time24.split(':').map(Number)
+    const period = hours >= 12 ? 'PM' : 'AM'
+    const hours12 = hours % 12 || 12
+    return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -138,7 +145,7 @@ export default function RestaurantsPage() {
                     />
                     <div className="absolute top-4 right-4">
                       {!isChecking && (
-                        <Badge variant={isOpen ? 'default' : 'destructive'}>
+                        <Badge variant={isOpen ? 'default' : 'destructive'} className={isOpen ? 'bg-green-600' : ''}>
                           {isOpen ? 'Open Now' : 'Closed'}
                         </Badge>
                       )}
@@ -158,7 +165,7 @@ export default function RestaurantsPage() {
                     </div>
                     <p className="text-sm line-clamp-2 text-muted-foreground mb-2">{res.description}</p>
                     <div className="text-xs font-medium text-primary">
-                      Hours: {res.hours.open} - {res.hours.close}
+                      Hours: {format12h(res.hours.open)} - {format12h(res.hours.close)}
                     </div>
                   </CardHeader>
                   <CardFooter className="mt-auto pt-0">

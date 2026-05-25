@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Plus, Minus, ShoppingCart, MapPin, Clock } from 'lucide-react'
 import Image from 'next/image'
 import { useCart } from '@/components/cart-provider'
-import { toast } from '@/hooks/use-toast'
+import { useToast } from '@/hooks/use-toast'
 
 const MENU_ITEMS = [
   { id: '1', name: 'Cebu Lechon (1/4 kg)', description: 'The famous Cebuano roasted pig, known for its extra crispy skin and flavorful meat.', price: 250, category: 'Lechon', image: 'https://picsum.photos/seed/lechon/400/300' },
@@ -23,6 +23,7 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ id:
   const { id } = use(params)
   const { addItem } = useCart()
   const [isOpen, setIsOpen] = useState<boolean | null>(null)
+  const { toast } = useToast()
 
   // Mock operating hours for the demo
   const operatingHours = { open: '10:00', close: '22:00' }
@@ -57,6 +58,13 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ id:
     const interval = setInterval(checkStatus, 60000)
     return () => clearInterval(interval)
   }, [])
+
+  const format12h = (time24: string) => {
+    const [hours, minutes] = time24.split(':').map(Number)
+    const period = hours >= 12 ? 'PM' : 'AM'
+    const hours12 = hours % 12 || 12
+    return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`
+  }
 
   const handleAddToCart = (item: any) => {
     addItem({
@@ -100,7 +108,7 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ id:
             <h1 className="text-4xl md:text-5xl font-headline font-bold mb-2">Authentic Cebuano Flavors</h1>
             <div className="flex items-center gap-2 opacity-90 text-sm mb-4">
               <Clock className="h-4 w-4" />
-              <span>Hours (Manila Time): {operatingHours.open} - {operatingHours.close}</span>
+              <span>Hours (Manila Time): {format12h(operatingHours.open)} - {format12h(operatingHours.close)}</span>
             </div>
             <p className="text-lg opacity-90 max-w-2xl">Serving traditional recipes passed down through generations in the heart of Cebu.</p>
           </div>
