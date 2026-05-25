@@ -15,11 +15,11 @@ import {
   ShoppingBag, 
   MapPin, 
   Calendar, 
-  Receipt, 
   Printer, 
   User, 
   Phone, 
-  CreditCard 
+  CreditCard,
+  Store
 } from 'lucide-react'
 import Link from 'next/link'
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase'
@@ -34,6 +34,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Separator } from '@/components/ui/separator'
+import { RESTAURANTS } from '@/lib/restaurants'
 
 export default function OrdersPage() {
   const { user, loading: userLoading } = useUser()
@@ -64,6 +65,10 @@ export default function OrdersPage() {
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
     return format(date, 'MMM dd, yyyy • h:mm a');
   };
+
+  const getRestaurantName = (id: string) => {
+    return RESTAURANTS.find(r => r.id === id)?.name || 'Unknown Restaurant'
+  }
 
   if (userLoading || ordersLoading) {
     return (
@@ -147,11 +152,16 @@ export default function OrdersPage() {
                     <div className="bg-muted/30 p-8 rounded-[2rem] space-y-4">
                       {order.items?.map((item: any, idx: number) => (
                         <div key={idx} className="flex justify-between items-center">
-                          <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center font-black text-primary border shadow-sm">{item.quantity}x</div>
-                            <span className="font-bold text-foreground">{item.name}</span>
+                          <div className="flex items-center gap-4 min-w-0">
+                            <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center font-black text-primary border shadow-sm shrink-0">{item.quantity}x</div>
+                            <div className="min-w-0">
+                              <span className="font-bold text-foreground block truncate">{item.name}</span>
+                              <span className="text-[9px] text-muted-foreground flex items-center gap-1 uppercase tracking-tighter">
+                                <Store className="h-2 w-2" /> {getRestaurantName(item.restaurantId)}
+                              </span>
+                            </div>
                           </div>
-                          <span className="font-black text-foreground/60">₱{item.price * item.quantity}</span>
+                          <span className="font-black text-foreground/60 whitespace-nowrap">₱{item.price * item.quantity}</span>
                         </div>
                       ))}
                     </div>
@@ -232,11 +242,16 @@ export default function OrdersPage() {
 
                             <div className="w-full space-y-3 mb-6">
                                {selectedOrder.items?.map((item: any, i: number) => (
-                                 <div key={i} className="flex justify-between items-center text-sm">
-                                    <span className="text-muted-foreground">
-                                       <span className="font-bold text-foreground">{item.quantity}x</span> {item.name}
-                                    </span>
-                                    <span className="font-bold">₱{item.price * item.quantity}</span>
+                                 <div key={i} className="flex justify-between items-start text-sm">
+                                    <div className="min-w-0">
+                                      <span className="text-muted-foreground block truncate">
+                                         <span className="font-bold text-foreground">{item.quantity}x</span> {item.name}
+                                      </span>
+                                      <span className="text-[8px] text-muted-foreground uppercase tracking-tighter flex items-center gap-1">
+                                        <Store className="h-2 w-2" /> {getRestaurantName(item.restaurantId)}
+                                      </span>
+                                    </div>
+                                    <span className="font-bold whitespace-nowrap">₱{item.price * item.quantity}</span>
                                  </div>
                                ))}
                             </div>

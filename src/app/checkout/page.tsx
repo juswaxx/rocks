@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Wallet, Landmark, Truck, Upload, AlertCircle, ShoppingBag } from 'lucide-react'
+import { Wallet, Landmark, Truck, Upload, AlertCircle, ShoppingBag, Store } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/hooks/use-toast'
 import { RESTAURANTS, isRestaurantOpen } from '@/lib/restaurants'
@@ -49,6 +49,10 @@ export default function CheckoutPage() {
     
     setClosedRestaurants(Array.from(new Set(closed)))
   }, [items])
+
+  const getRestaurantName = (id: string) => {
+    return RESTAURANTS.find(r => r.id === id)?.name || 'Unknown Restaurant'
+  }
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -103,7 +107,6 @@ export default function CheckoutPage() {
 
     const ordersRef = collection(db, 'users', user.uid, 'orders')
     
-    // Non-blocking write following guidelines for optimistic UI
     addDoc(ordersRef, orderData)
       .catch(async (err) => {
         const permissionError = new FirestorePermissionError({
@@ -114,14 +117,12 @@ export default function CheckoutPage() {
         errorEmitter.emit('permission-error', permissionError);
       });
 
-    // Proceed immediately leveraging local cache
     clearCart()
     toast({
       title: "Order Placed Successfully!",
       description: "Your Cebuano feast is on the way!",
     })
     
-    // Short delay to ensure toast is seen before navigation
     setTimeout(() => {
       router.push('/orders')
     }, 100)
@@ -284,12 +285,17 @@ export default function CheckoutPage() {
               <CardContent className="space-y-6">
                 <div className="max-h-60 overflow-y-auto space-y-3 pr-2">
                   {items.map((item) => (
-                    <div key={item.id} className="flex justify-between items-center text-sm">
-                      <div className="flex gap-2">
+                    <div key={item.id} className="flex justify-between items-start text-sm border-b border-muted/50 pb-2">
+                      <div className="flex gap-2 min-w-0">
                         <span className="font-bold text-primary">{item.quantity}x</span>
-                        <span className="text-muted-foreground truncate max-w-[150px]">{item.name}</span>
+                        <div className="min-w-0">
+                          <p className="font-medium text-foreground truncate">{item.name}</p>
+                          <p className="text-[9px] text-muted-foreground flex items-center gap-1 uppercase tracking-tighter">
+                            <Store className="h-2 w-2" /> {getRestaurantName(item.restaurantId)}
+                          </p>
+                        </div>
                       </div>
-                      <span className="font-medium">₱{item.price * item.quantity}</span>
+                      <span className="font-medium whitespace-nowrap">₱{item.price * item.quantity}</span>
                     </div>
                   ))}
                 </div>

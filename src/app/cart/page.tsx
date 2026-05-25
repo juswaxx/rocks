@@ -5,15 +5,20 @@ import { Navbar } from '@/components/navbar'
 import { useCart } from '@/components/cart-provider'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Trash2, Plus, Minus, ArrowLeft, ArrowRight, ShoppingBag, Info, Bike, Receipt, CreditCard } from 'lucide-react'
+import { Trash2, Plus, Minus, ArrowLeft, ArrowRight, ShoppingBag, Bike, Receipt, CreditCard, Store } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
+import { RESTAURANTS } from '@/lib/restaurants'
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalAmount } = useCart()
 
   const DELIVERY_FEE = 50
+
+  const getRestaurantName = (id: string) => {
+    return RESTAURANTS.find(r => r.id === id)?.name || 'Unknown Restaurant'
+  }
 
   if (items.length === 0) {
     return (
@@ -58,6 +63,10 @@ export default function CartPage() {
                     <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
                   </div>
                   <div className="flex-1 min-w-0 text-center sm:text-left">
+                    <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                      <Store className="h-3 w-3 text-primary" />
+                      <p className="text-[10px] font-black uppercase tracking-widest text-primary/80">{getRestaurantName(item.restaurantId)}</p>
+                    </div>
                     <h3 className="text-xl font-bold mb-1 truncate">{item.name}</h3>
                     <p className="text-muted-foreground text-sm mb-3">Item #PRD-{item.id.slice(0, 4).toUpperCase()}</p>
                     <div className="flex items-center justify-center sm:justify-start gap-4">
@@ -127,3 +136,4 @@ export default function CartPage() {
     </div>
   )
 }
+
