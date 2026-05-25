@@ -1,9 +1,9 @@
 
 export const firebaseConfig = {
-  apiKey: "AIzaSy...", // This is a placeholder; the actual config is typically managed in the console
-  authDomain: "puffnplate.firebaseapp.com",
-  projectId: "puffnplate",
-  storageBucket: "puffnplate.firebasestorage.app",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+  apiKey: "AIzaSyDBkH4wt-5yPEJzTAtSlzveL-hNqwgf8f0",
+  authDomain: "studio-8696107498-af51d.firebaseapp.com",
+  projectId: "studio-8696107498-af51d",
+  storageBucket: "studio-8696107498-af51d.firebasestorage.app",
+  messagingSenderId: "579221505711",
+  appId: "1:579221505711:web:0ae984d2eef6d15206765a"
 };
