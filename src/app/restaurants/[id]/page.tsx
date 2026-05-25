@@ -1,7 +1,7 @@
 
 "use client"
 
-import { use, useState, useEffect } from 'react'
+import { use, useState, useEffect, useMemo } from 'react'
 import { Navbar } from '@/components/navbar'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -11,22 +11,26 @@ import Image from 'next/image'
 import { useCart } from '@/components/cart-provider'
 import { useToast } from '@/hooks/use-toast'
 import { RESTAURANTS, isRestaurantOpen, format12h } from '@/lib/restaurants'
-
-const MENU_ITEMS = [
-  { id: '1', name: 'Cebu Lechon (1/4 kg)', description: 'The famous Cebuano roasted pig, known for its extra crispy skin and flavorful meat.', price: 250, category: 'Lechon', image: 'https://picsum.photos/seed/lechon/400/300' },
-  { id: '2', name: 'Ginabot (Crispy Chicharon)', description: 'Deep-fried pork mesentery, a Cebuano pungko-pungko favorite.', price: 45, category: 'Street Food', image: 'https://picsum.photos/seed/ginabot/400/300' },
-  { id: '3', name: 'Puso (Hanging Rice)', description: 'Rice boiled in a diamond-shaped casing of woven coconut leaves.', price: 10, category: 'Sides', image: 'https://picsum.photos/seed/puso/400/300' },
-  { id: '4', name: 'Ngohiong', description: 'Cebu\'s unique take on the spring roll, battered and deep-fried.', price: 15, category: 'Appetizer', image: 'https://picsum.photos/seed/ngohiong/400/300' },
-  { id: '5', name: 'Mango Float', description: 'Layered dessert with Cebu\'s famous sweet mangoes, cream, and graham crackers.', price: 120, category: 'Dessert', image: 'https://picsum.photos/seed/mangofloat/400/300' },
-]
+import { cn } from '@/lib/utils'
 
 export default function RestaurantDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const { addItem } = useCart()
   const [isOpen, setIsOpen] = useState<boolean | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const { toast } = useToast()
 
-  const restaurant = RESTAURANTS.find(r => r.id === id) || RESTAURANTS[0]
+  const restaurant = useMemo(() => RESTAURANTS.find(r => r.id === id) || RESTAURANTS[0], [id])
+  
+  const categories = useMemo(() => {
+    const cats = new Set(restaurant.menu.map(item => item.category))
+    return Array.from(cats)
+  }, [restaurant])
+
+  const filteredItems = useMemo(() => {
+    if (!selectedCategory) return restaurant.menu
+    return restaurant.menu.filter(item => item.category === selectedCategory)
+  }, [selectedCategory, restaurant])
 
   useEffect(() => {
     const checkStatus = () => {
@@ -100,22 +104,39 @@ export default function RestaurantDetailPage({ params }: { params: Promise<{ id:
         <div className="flex flex-col md:flex-row gap-8">
           {/* Categories Sidebar */}
           <div className="md:w-64 space-y-4">
-            <div className="bg-muted/50 p-6 rounded-xl border border-border">
+            <div className="bg-muted/50 p-6 rounded-xl border border-border sticky top-24">
               <h3 className="font-bold text-lg mb-4">Menu Categories</h3>
               <div className="flex flex-col gap-1">
-                <Button variant="ghost" className="justify-start text-primary bg-primary/10">Full Menu</Button>
-                <Button variant="ghost" className="justify-start">Signature Lechon</Button>
-                <Button variant="ghost" className="justify-start">Street Food Corner</Button>
-                <Button variant="ghost" className="justify-start">Cebuano Desserts</Button>
-                <Button variant="ghost" className="justify-start">Local Refreshments</Button>
+                <Button 
+                  variant="ghost" 
+                  className={cn("justify-start", !selectedCategory && "text-primary bg-primary/10")}
+                  onClick={() => setSelectedCategory(null)}
+                >
+                  Full Menu
+                </Button>
+                {categories.map(cat => (
+                  <Button 
+                    key={cat}
+                    variant="ghost" 
+                    className={cn("justify-start", selectedCategory === cat && "text-primary bg-primary/10")}
+                    onClick={() => setSelectedCategory(cat)}
+                  >
+                    {cat}
+                  </Button>
+                ))}
               </div>
             </div>
           </div>
 
           {/* Menu Items */}
           <div className="flex-1">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold font-headline">{selectedCategory || 'Full Menu'}</h2>
+              <p className="text-muted-foreground">{filteredItems.length} items available</p>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {MENU_ITEMS.map((item) => (
+              {filteredItems.map((item) => (
                 <Card key={item.id} className="overflow-hidden flex h-44 group hover:border-primary/50 transition-colors shadow-sm">
                   <div className="relative w-40 h-full shrink-0 overflow-hidden">
                     <Image src={item.image} alt={item.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
