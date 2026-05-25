@@ -1,0 +1,41 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Filipino food spread",
+      "imageUrl": "https://picsum.photos/seed/food1/1200/600",
+      "imageHint": "filipino feast"
+    },
+    {
+      "id": "restaurant-cebu",
+      "description": "Cebu Lechon House",
+      "imageUrl": "https://picsum.photos/seed/restaurant1/600/400",
+      "imageHint": "roasted pig"
+    },
+    {
+      "id": "restaurant-tapsilog",
+      "description": "Tapsilog Express",
+      "imageUrl": "https://picsum.photos/seed/restaurant2/600/400",
+      "imageHint": "filipino breakfast"
+    },
+    {
+      "id": "menu-sisig",
+      "description": "Pork Sisig",
+      "imageUrl": "https://picsum.photos/seed/sisig/400/300",
+      "imageHint": "pork sisig"
+    },
+    {
+      "id": "menu-inasal",
+      "description": "Chicken Inasal",
+      "imageUrl": "https://picsum.photos/seed/inasal/400/300",
+      "imageHint": "grilled chicken"
+    },
+    {
+      "id": "menu-halo-halo",
+      "description": "Halo-Halo",
+      "imageUrl": "https://picsum.photos/seed/halohalo/400/300",
+      "imageHint": "filipino dessert"
+    }
+  ]
+}
