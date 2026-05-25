@@ -9,17 +9,18 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Wallet, Landmark, Truck, Upload, AlertCircle } from 'lucide-react'
+import { Wallet, Landmark, Truck, Upload, AlertCircle, ShoppingBag } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/hooks/use-toast'
 import { RESTAURANTS, isRestaurantOpen } from '@/lib/restaurants'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { useAuth, useUser, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase'
+import { useUser, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import Link from 'next/link'
 
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart } = useCart()
-  const { user } = useUser()
+  const { user, loading: userLoading } = useUser()
   const db = useFirestore()
   const [paymentMethod, setPaymentMethod] = useState('cod')
   const [loading, setLoading] = useState(false)
@@ -60,6 +61,15 @@ export default function CheckoutPage() {
       return
     }
 
+    if (items.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Cart Empty",
+        description: "Your basket is empty. Add some food first!",
+      })
+      return
+    }
+
     if (closedRestaurants.length > 0) {
       toast({
         variant: "destructive",
@@ -80,7 +90,7 @@ export default function CheckoutPage() {
         restaurantId: item.restaurantId,
         imageUrl: item.imageUrl
       })),
-      totalAmount: totalAmount + 50,
+      totalAmount: totalAmount + 50, // Subtotal + Delivery Fee
       status: 'Preparing',
       paymentMethod: paymentMethod,
       deliveryAddress: formData.address,
@@ -96,7 +106,7 @@ export default function CheckoutPage() {
         clearCart()
         toast({
           title: "Order Placed Successfully!",
-          description: "Your order has been received. Redirecting to status page...",
+          description: "Your Cebuano feast is on the way!",
         })
         router.push('/orders')
       })
@@ -118,7 +128,22 @@ export default function CheckoutPage() {
       })
   }
 
-  const isOrderBlocked = closedRestaurants.length > 0 || items.length === 0
+  if (items.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <main className="flex-1 flex flex-col items-center justify-center p-4">
+          <div className="bg-primary/5 rounded-full p-10 mb-6">
+            <ShoppingBag className="h-20 w-20 text-primary" />
+          </div>
+          <h2 className="text-2xl font-bold mb-2">Your basket is empty</h2>
+          <Link href="/restaurants">
+            <Button size="lg" className="rounded-xl px-10">Go Shop for Food</Button>
+          </Link>
+        </main>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -247,17 +272,13 @@ export default function CheckoutPage() {
                       <Input type="file" className="hidden" />
                     </div>
                   </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="ref">Reference Number</Label>
-                    <Input id="ref" placeholder="Enter Ref #" />
-                  </div>
                 </div>
               )}
             </section>
           </div>
 
           <div>
-            <Card className="sticky top-24">
+            <Card className="sticky top-24 border-none shadow-sm bg-muted/30">
               <CardHeader>
                 <CardTitle>Your Order</CardTitle>
               </CardHeader>
@@ -266,22 +287,22 @@ export default function CheckoutPage() {
                   {items.map((item) => (
                     <div key={item.id} className="flex justify-between items-center text-sm">
                       <div className="flex gap-2">
-                        <span className="font-bold">{item.quantity}x</span>
-                        <span className="text-muted-foreground">{item.name}</span>
+                        <span className="font-bold text-primary">{item.quantity}x</span>
+                        <span className="text-muted-foreground truncate max-w-[150px]">{item.name}</span>
                       </div>
                       <span className="font-medium">₱{item.price * item.quantity}</span>
                     </div>
                   ))}
                 </div>
                 
-                <div className="border-t pt-6 space-y-2">
+                <div className="border-t border-muted pt-6 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Subtotal</span>
                     <span>₱{totalAmount}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Delivery</span>
-                    <span>₱50</span>
+                    <span className="text-green-600 font-medium">₱50</span>
                   </div>
                   <div className="flex justify-between text-xl font-bold pt-2">
                     <span>Total Amount</span>
@@ -289,11 +310,11 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-lg" disabled={loading || isOrderBlocked}>
-                  {loading ? 'Processing...' : isOrderBlocked ? 'Ordering Blocked' : 'Place Order'}
+                <Button type="submit" className="w-full h-14 text-lg font-bold rounded-xl shadow-lg" disabled={loading || closedRestaurants.length > 0}>
+                  {loading ? 'Placing Order...' : 'Place Order Now'}
                 </Button>
-                <p className="text-[10px] text-center text-muted-foreground">
-                  By placing your order, you agree to Puff N&apos; Plate&apos;s Terms of Service and Privacy Policy.
+                <p className="text-[10px] text-center text-muted-foreground mt-4">
+                  By placing your order, you agree to our terms of service.
                 </p>
               </CardContent>
             </Card>

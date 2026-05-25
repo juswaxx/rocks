@@ -5,7 +5,7 @@ import { Navbar } from '@/components/navbar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ChevronRight, Package, Clock, CheckCircle2, XCircle, ShoppingBag } from 'lucide-react'
+import { ChevronRight, Package, Clock, CheckCircle2, XCircle, ShoppingBag, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase'
 import { collection, query, orderBy } from 'firebase/firestore'
@@ -37,7 +37,7 @@ export default function OrdersPage() {
   const formatDate = (timestamp: any) => {
     if (!timestamp) return 'Just now';
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return format(date, 'MMM dd, yyyy');
+    return format(date, 'MMM dd, yyyy • h:mm a');
   };
 
   if (userLoading || ordersLoading) {
@@ -73,7 +73,7 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-muted/20">
       <Navbar />
       <main className="container mx-auto px-4 py-12 max-w-3xl">
         <h1 className="text-3xl font-headline font-bold mb-8">My Orders</h1>
@@ -81,51 +81,68 @@ export default function OrdersPage() {
         {orders && orders.length > 0 ? (
           <div className="space-y-6">
             {orders.map((order) => (
-              <Card key={order.id} className="hover:border-primary transition-colors group">
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-muted rounded-full">
-                        {getStatusIcon(order.status)}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-bold">{order.id.substring(0, 8).toUpperCase()}</span>
-                          <Badge variant={order.status === 'Completed' ? 'default' : order.status === 'Cancelled' ? 'destructive' : 'outline'} className={order.status === 'Preparing' ? 'border-yellow-500 text-yellow-600' : ''}>
-                            {order.status}
-                          </Badge>
+              <Card key={order.id} className="border-none shadow-sm hover:shadow-md transition-shadow group overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="p-6">
+                    <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-primary/10 rounded-xl">
+                          {getStatusIcon(order.status)}
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          {formatDate(order.createdAt)} • {order.items?.length || 0} items
-                        </p>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-bold font-mono tracking-tight text-lg">#{order.id.substring(0, 6).toUpperCase()}</span>
+                            <Badge variant={order.status === 'Completed' ? 'default' : order.status === 'Cancelled' ? 'destructive' : 'outline'} className={order.status === 'Preparing' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' : ''}>
+                              {order.status}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {formatDate(order.createdAt)}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-primary">₱{order.totalAmount}</p>
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">{order.paymentMethod}</p>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center justify-between md:flex-col md:items-end gap-2">
-                      <span className="text-lg font-bold text-primary">₱{order.totalAmount}</span>
-                      <Button variant="ghost" size="sm" className="group-hover:translate-x-1 transition-transform">
-                        View Details <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
+
+                    <div className="space-y-3 py-4 border-y border-dashed">
+                      {order.items?.map((item: any, idx: number) => (
+                        <div key={idx} className="flex justify-between items-center text-sm">
+                          <span className="flex gap-2">
+                            <span className="font-bold text-primary">{item.quantity}x</span>
+                            <span className="text-muted-foreground">{item.name}</span>
+                          </span>
+                          <span className="font-medium">₱{item.price * item.quantity}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-4 flex items-start gap-2 text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg">
+                      <MapPin className="h-3 w-3 shrink-0 mt-0.5" />
+                      <p>{order.deliveryAddress}</p>
                     </div>
                   </div>
                   
-                  <div className="mt-4 pt-4 border-t">
-                    <p className="text-xs font-medium text-muted-foreground uppercase mb-2">Order Summary:</p>
-                    <p className="text-sm">
-                      {order.items?.map((it: any) => `${it.name} x${it.quantity}`).join(', ')}
-                    </p>
+                  <div className="bg-primary/5 p-4 flex justify-between items-center">
+                    <span className="text-xs font-bold text-primary uppercase">Track your delivery</span>
+                    <Button variant="ghost" size="sm" className="h-8 text-xs font-bold group-hover:translate-x-1 transition-transform">
+                      Details <ChevronRight className="ml-1 h-3 w-3" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 bg-muted/20 rounded-2xl border-2 border-dashed">
-            <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <div className="text-center py-20 bg-card rounded-2xl border border-dashed border-muted shadow-sm">
+            <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-50" />
             <h3 className="text-xl font-bold mb-2">No orders yet</h3>
-            <p className="text-muted-foreground mb-8">Time to taste the best of Cebu!</p>
+            <p className="text-muted-foreground mb-8 text-sm max-w-xs mx-auto">Hungry? Discover the best flavors of Cebu and your history will appear here.</p>
             <Link href="/restaurants">
-              <Button>Explore Restaurants</Button>
+              <Button className="rounded-xl px-8 font-bold">Explore Restaurants</Button>
             </Link>
           </div>
         )}
