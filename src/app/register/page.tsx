@@ -44,16 +44,7 @@ export default function RegisterPage() {
 
       const userDocRef = doc(db, 'users', user.uid);
       
-      // Non-blocking write following guidelines
-      setDoc(userDocRef, userData)
-        .catch(async (err) => {
-          const permissionError = new FirestorePermissionError({
-            path: userDocRef.path,
-            operation: 'create',
-            requestResourceData: userData,
-          });
-          errorEmitter.emit('permission-error', permissionError);
-        });
+      await setDoc(userDocRef, userData)
 
       toast({
         title: "Registration Successful",
@@ -61,6 +52,17 @@ export default function RegisterPage() {
       })
       router.push('/')
     } catch (error: any) {
+      if (error?.code === 'permission-denied') {
+        const userDocRef = auth.currentUser ? doc(db, 'users', auth.currentUser.uid) : null
+        if (userDocRef) {
+          const permissionError = new FirestorePermissionError({
+            path: userDocRef.path,
+            operation: 'create',
+          });
+          errorEmitter.emit('permission-error', permissionError);
+        }
+      }
+
       toast({
         variant: "destructive",
         title: "Registration Failed",

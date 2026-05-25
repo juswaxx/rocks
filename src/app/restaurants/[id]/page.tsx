@@ -18,7 +18,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog"
 
 export default function RestaurantDetailPage({ params }: { params: Promise<{ id: string }> }) {

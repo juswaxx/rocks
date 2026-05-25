@@ -12,7 +12,7 @@ import { useUser } from '@/firebase'
 export default function Home() {
   const { user } = useUser()
   const heroImg = PlaceHolderImages.find(img => img.id === 'hero-bg')
-  const haloHaloImg = PlaceHolderImages.find(img => img.id === 'menu-halo-halo')?.imageUrl || 'https://picsum.photos/seed/halohalo/800/600'
+  const haloHaloImg = PlaceHolderImages.find(img => img.id === 'menu-halo-halo')?.imageUrl || 'https://commons.wikimedia.org/wiki/Special:FilePath/Halo%20halo1.jpg?width=800'
   
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -21,7 +21,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center overflow-hidden">
         <Image 
-          src={heroImg?.imageUrl || 'https://picsum.photos/seed/cebufood/1200/600'} 
+          src={heroImg?.imageUrl || 'https://commons.wikimedia.org/wiki/Special:FilePath/Lechon%20in%20the%20Philippines.jpg?width=1400'} 
           alt="Cebuano Cuisine" 
           fill
           className="object-cover brightness-[0.4] scale-105"

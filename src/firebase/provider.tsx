@@ -5,12 +5,14 @@ import React, { createContext, useContext } from 'react';
 import { FirebaseApp } from 'firebase/app';
 import { Firestore } from 'firebase/firestore';
 import { Auth } from 'firebase/auth';
+import { FirebaseStorage } from 'firebase/storage';
 import { FirebaseErrorListener } from '@/components/firebase-error-listener';
 
 interface FirebaseContextType {
   app: FirebaseApp;
   db: Firestore;
   auth: Auth;
+  storage: FirebaseStorage;
 }
 
 const FirebaseContext = createContext<FirebaseContextType | null>(null);
@@ -19,15 +21,17 @@ export function FirebaseProvider({
   children, 
   app, 
   db, 
-  auth 
+  auth,
+  storage
 }: { 
   children: React.ReactNode; 
   app: FirebaseApp; 
   db: Firestore; 
-  auth: Auth 
+  auth: Auth;
+  storage: FirebaseStorage;
 }) {
   return (
-    <FirebaseContext.Provider value={{ app, db, auth }}>
+    <FirebaseContext.Provider value={{ app, db, auth, storage }}>
       <FirebaseErrorListener />
       {children}
     </FirebaseContext.Provider>
@@ -43,3 +47,4 @@ export const useFirebase = () => {
 export const useFirebaseApp = () => useFirebase().app;
 export const useFirestore = () => useFirebase().db;
 export const useAuth = () => useFirebase().auth;
+export const useStorage = () => useFirebase().storage;

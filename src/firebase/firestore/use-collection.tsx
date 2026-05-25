@@ -5,8 +5,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { 
   Query, 
   onSnapshot, 
-  DocumentData, 
-  QuerySnapshot,
+  DocumentData,
   FirestoreError 
 } from 'firebase/firestore';
 import { errorEmitter } from '../error-emitter';
@@ -55,5 +54,7 @@ export function useCollection<T = DocumentData>(query: Query<T> | null) {
 }
 
 export function useMemoFirebase<T>(factory: () => T, deps: any[]): T {
+  // This helper mirrors useMemo for Firebase query construction with caller-managed deps.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   return useMemo(factory, deps);
 }

@@ -3,13 +3,13 @@
 
 import { useState, useEffect } from 'react'
 import { Navbar } from '@/components/navbar'
-import { Card, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin, Star, Clock, Bike, Search, SlidersHorizontal } from 'lucide-react'
-import { RESTAURANTS, isRestaurantOpen, format12h } from '@/lib/restaurants'
+import { RESTAURANTS, isRestaurantOpen } from '@/lib/restaurants'
 import { Input } from '@/components/ui/input'
 
 const QUICK_CATEGORIES = ['All', 'Lechon', 'Seafood', 'BBQ', 'Desserts', 'Street Food']

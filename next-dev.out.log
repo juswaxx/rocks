@@ -1,0 +1,11 @@
+   ▲ Next.js 15.5.18 (Turbopack)
+   - Local:        http://localhost:9002
+   - Network:      http://192.168.11.202:9002
+   - Environments: .env.local
+
+ ✓ Starting...
+Creating turbopack project { dir: 'C:\\Users\\anasc\\Downloads\\RMS', testMode: true }
+ ✓ Ready in 1715ms
+ ○ Compiling /restaurants ...
+ ✓ Compiled /restaurants in 5.5s
+ GET /restaurants 200 in 6390ms

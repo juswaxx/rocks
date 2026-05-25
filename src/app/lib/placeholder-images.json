@@ -1,131 +1,130 @@
-
 {
   "placeholderImages": [
     {
       "id": "hero-bg",
-      "description": "Cebuano food spread with lechon",
-      "imageUrl": "https://picsum.photos/seed/cebufood/1200/600",
-      "imageHint": "cebu lechon"
+      "description": "Restaurant food background",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Lechon%20in%20the%20Philippines.jpg?width=1400",
+      "imageHint": "restaurant food"
     },
     {
       "id": "res-lechon-house",
-      "description": "Cebu Lechon House storefront",
-      "imageUrl": "https://picsum.photos/seed/lechonhouse/600/400",
-      "imageHint": "roasted pig"
+      "description": "Cebu Lechon House restaurant image",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Lechon%20in%20the%20Philippines.jpg?width=900",
+      "imageHint": "lechon"
     },
     {
       "id": "res-larsian",
-      "description": "Larsian BBQ Grill vibe",
-      "imageUrl": "https://picsum.photos/seed/larsian/600/400",
-      "imageHint": "filipino bbq"
+      "description": "Larsian BBQ Grill image",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Filipino%20pork%20barbecue.jpg?width=900",
+      "imageHint": "filipino barbecue"
     },
     {
       "id": "res-pungko",
-      "description": "Pungko-Pungko Central fried items",
-      "imageUrl": "https://picsum.photos/seed/pungkopungko/600/400",
+      "description": "Pungko-Pungko Central street food image",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Filipino%20pork%20barbecue.jpg?width=900",
       "imageHint": "street food"
     },
     {
       "id": "res-zubuchon",
-      "description": "Zubuchon modern interior",
-      "imageUrl": "https://picsum.photos/seed/zubuchon/600/400",
-      "imageHint": "modern restaurant"
+      "description": "Zubuchon restaurant image",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Lechon%20in%20the%20Philippines.jpg?width=900",
+      "imageHint": "lechon"
     },
     {
       "id": "res-casaverde",
-      "description": "Casa Verde classic facade",
-      "imageUrl": "https://picsum.photos/seed/casaverde/600/400",
-      "imageHint": "american diner"
+      "description": "Casa Verde restaurant image",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Hamburger%20%287%29.jpg?width=900",
+      "imageHint": "burger"
     },
     {
       "id": "res-mactanseaside",
-      "description": "Mactan Seaside Grill view",
-      "imageUrl": "https://picsum.photos/seed/mactanseafood/600/400",
-      "imageHint": "seaside grill"
+      "description": "Mactan Seaside Grill seafood image",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Brigtsen%27s%20seafood%20platter%20%28aka%20the%20%22Shell%20Beach%20Diet%22%29.jpg?width=900",
+      "imageHint": "seafood"
     },
     {
       "id": "menu-lechon-1",
-      "description": "Lechon 1/4 kg",
-      "imageUrl": "https://picsum.photos/seed/lechon1/400/300",
-      "imageHint": "roasted pork"
+      "description": "Cebu Lechon 1/4 kg",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Filipino%20%28Visayan%29%20lechon%2C%20with%20white%20rice%2001.jpg?width=700",
+      "imageHint": "cebu lechon"
     },
     {
       "id": "menu-lechon-2",
-      "description": "Lechon 1/2 kg",
-      "imageUrl": "https://picsum.photos/seed/lechon2/400/300",
-      "imageHint": "crispy pork"
+      "description": "Cebu Lechon 1/2 kg",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Lechon%20in%20the%20Philippines.jpg?width=700",
+      "imageHint": "cebu lechon"
     },
     {
       "id": "menu-paksiw",
       "description": "Lechon Paksiw",
-      "imageUrl": "https://picsum.photos/seed/paksiw/400/300",
-      "imageHint": "meat stew"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Filipino%20%28Visayan%29%20lechon%2C%20with%20white%20rice%2001.jpg?width=700",
+      "imageHint": "lechon paksiw"
     },
     {
       "id": "menu-dinuguan",
       "description": "Pork Dinuguan",
-      "imageUrl": "https://picsum.photos/seed/dinuguan/400/300",
-      "imageHint": "black stew"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Dinuguan-2022.jpg?width=700",
+      "imageHint": "dinuguan"
     },
     {
       "id": "menu-puso",
       "description": "Puso Hanging Rice",
-      "imageUrl": "https://picsum.photos/seed/puso1/400/300",
-      "imageHint": "woven rice"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Puso%20or%20Hanging%20Rice.jpg?width=700",
+      "imageHint": "hanging rice"
     },
     {
       "id": "menu-bbq-pork",
       "description": "Pork BBQ Stick",
-      "imageUrl": "https://picsum.photos/seed/porkbbq/400/300",
-      "imageHint": "pork skewer"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Filipino%20pork%20barbecue.jpg?width=700",
+      "imageHint": "pork barbecue"
     },
     {
       "id": "menu-inasal",
       "description": "Chicken Inasal",
-      "imageUrl": "https://picsum.photos/seed/inasal/400/300",
-      "imageHint": "grilled chicken"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Chicken%20Inasal.JPG?width=700",
+      "imageHint": "chicken inasal"
     },
     {
       "id": "menu-chorizo",
       "description": "Chorizo de Cebu",
-      "imageUrl": "https://picsum.photos/seed/chorizo/400/300",
-      "imageHint": "sausage skewer"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Chorizo%20De%20Cebu.jpg?width=700",
+      "imageHint": "chorizo cebu"
     },
     {
       "id": "menu-ginabot",
       "description": "Ginabot Crispy Intestine",
-      "imageUrl": "https://picsum.photos/seed/ginabot1/400/300",
-      "imageHint": "fried food"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Chicharron.jpg?width=700",
+      "imageHint": "ginabot"
     },
     {
       "id": "menu-ngohiong",
       "description": "Cebuano Ngohiong",
-      "imageUrl": "https://picsum.photos/seed/ngohiong1/400/300",
-      "imageHint": "spring roll"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Chinese%20Ngohiong%20and%20Chorizo.jpg?width=700",
+      "imageHint": "ngohiong"
     },
     {
       "id": "menu-ribs",
       "description": "Brian's Ribs",
-      "imageUrl": "https://picsum.photos/seed/ribs/400/300",
-      "imageHint": "pork ribs"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Barbecue%20ribs.jpg?width=700",
+      "imageHint": "ribs"
     },
     {
       "id": "menu-scallops",
-      "description": "Grilled Scallops",
-      "imageUrl": "https://picsum.photos/seed/scallops/400/300",
-      "imageHint": "seafood scallops"
+      "description": "Baked Scallops with Cheese",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Baked%20scallops%20food.jpg?width=700",
+      "imageHint": "baked scallops"
     },
     {
       "id": "menu-halo-halo",
       "description": "Halo-Halo",
-      "imageUrl": "https://picsum.photos/seed/halohalo/400/300",
-      "imageHint": "filipino dessert"
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Halo%20halo1.jpg?width=700",
+      "imageHint": "halo halo"
     },
     {
       "id": "menu-mango-shake",
-      "description": "Mango Shake",
-      "imageUrl": "https://picsum.photos/seed/mango/400/300",
-      "imageHint": "mango smoothie"
+      "description": "Fresh Mango Shake",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Mango%20and%20cross%20section%20edit.jpg?width=700",
+      "imageHint": "mango shake"
     }
   ]
 }

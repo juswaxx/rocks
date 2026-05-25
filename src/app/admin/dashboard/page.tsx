@@ -21,10 +21,13 @@ import {
 import { 
   ChartContainer, 
 } from '@/components/ui/chart'
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid } from 'recharts'
+import { Bar, BarChart, XAxis, YAxis, CartesianGrid } from 'recharts'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { useUserRole } from '@/firebase'
 
 const STATS = [
   { label: 'Total Revenue', value: '₱128,450', change: '+12.5%', trend: 'up', icon: TrendingUp, color: 'text-green-500', bg: 'bg-green-500/10' },
@@ -44,6 +47,30 @@ const CHART_DATA = [
 ]
 
 export default function AdminDashboard() {
+  const router = useRouter()
+  const { isAdmin, loading } = useUserRole()
+
+  useEffect(() => {
+    if (!loading && !isAdmin) {
+      router.replace('/')
+    }
+  }, [isAdmin, loading, router])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-muted/20">
+        <Navbar />
+        <main className="container mx-auto px-4 py-24">
+          <p className="text-sm font-bold text-muted-foreground">Checking access...</p>
+        </main>
+      </div>
+    )
+  }
+
+  if (!isAdmin) {
+    return null
+  }
+
   return (
     <div className="min-h-screen bg-muted/20">
       <Navbar />

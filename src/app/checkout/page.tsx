@@ -14,15 +14,18 @@ import { useRouter } from 'next/navigation'
 import { useToast } from '@/hooks/use-toast'
 import { RESTAURANTS, isRestaurantOpen } from '@/lib/restaurants'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { useUser, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase'
+import { useUser, useFirestore, useStorage } from '@/firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import Link from 'next/link'
 
 export default function CheckoutPage() {
   const { items, totalAmount, clearCart } = useCart()
-  const { user, loading: userLoading } = useUser()
+  const { user } = useUser()
   const db = useFirestore()
+  const storage = useStorage()
   const [paymentMethod, setPaymentMethod] = useState('cod')
+  const [paymentProof, setPaymentProof] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [closedRestaurants, setClosedRestaurants] = useState<string[]>([])
   const [formData, setFormData] = useState({
@@ -85,47 +88,65 @@ export default function CheckoutPage() {
       return
     }
 
-    setLoading(true)
-    
-    const orderData = {
-      userId: user.uid,
-      items: items.map(item => ({
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-        restaurantId: item.restaurantId,
-        imageUrl: item.imageUrl
-      })),
-      totalAmount: totalAmount + DELIVERY_FEE,
-      status: 'Preparing',
-      paymentMethod: paymentMethod,
-      deliveryAddress: formData.address,
-      customerName: formData.fullName,
-      customerPhone: formData.phone,
-      createdAt: serverTimestamp()
+    if (paymentMethod !== 'cod' && !paymentProof) {
+      toast({
+        variant: "destructive",
+        title: "Payment Proof Required",
+        description: "Please upload your payment screenshot before placing the order.",
+      })
+      return
     }
 
-    const ordersRef = collection(db, 'users', user.uid, 'orders')
-    
-    addDoc(ordersRef, orderData)
-      .catch(async (err) => {
-        const permissionError = new FirestorePermissionError({
-          path: ordersRef.path,
-          operation: 'create',
-          requestResourceData: orderData,
-        });
-        errorEmitter.emit('permission-error', permissionError);
-      });
+    setLoading(true)
 
-    clearCart()
-    toast({
-      title: "Order Placed Successfully!",
-      description: "Your Cebuano feast is on the way!",
-    })
-    
-    setTimeout(() => {
+    try {
+      let paymentProofUrl: string | null = null
+
+      if (paymentMethod !== 'cod' && paymentProof) {
+        const safeFileName = paymentProof.name.replace(/[^a-zA-Z0-9._-]/g, '_')
+        const proofRef = ref(storage, `payment-proofs/${user.uid}/${Date.now()}-${safeFileName}`)
+        await uploadBytes(proofRef, paymentProof)
+        paymentProofUrl = await getDownloadURL(proofRef)
+      }
+
+      const orderData = {
+        userId: user.uid,
+        items: items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          restaurantId: item.restaurantId,
+          imageUrl: item.imageUrl
+        })),
+        totalAmount: totalAmount + DELIVERY_FEE,
+        status: 'Preparing',
+        paymentMethod,
+        paymentProofName: paymentProof?.name || null,
+        paymentProofUrl,
+        deliveryAddress: formData.address,
+        customerName: formData.fullName,
+        customerPhone: formData.phone,
+        createdAt: serverTimestamp()
+      }
+
+      const ordersRef = collection(db, 'users', user.uid, 'orders')
+
+      await addDoc(ordersRef, orderData)
+      clearCart()
+      toast({
+        title: "Order Placed Successfully!",
+        description: "Your Cebuano feast is on the way!",
+      })
       router.push('/orders')
-    }, 100)
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Order Failed",
+        description: "We could not save your order or payment proof. Please try again.",
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (items.length === 0) {
@@ -266,11 +287,19 @@ export default function CheckoutPage() {
                   </div>
                   <div className="grid gap-2">
                     <Label>Upload Screenshot Proof</Label>
-                    <div className="border border-input rounded-md p-4 bg-background flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-accent transition-colors">
+                    <Label htmlFor="paymentProof" className="border border-input rounded-md p-4 bg-background flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-accent transition-colors">
                       <Upload className="h-6 w-6 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">Click to upload image</span>
-                      <Input type="file" className="hidden" />
-                    </div>
+                      <span className="text-xs text-muted-foreground">
+                        {paymentProof ? paymentProof.name : 'Click to upload image'}
+                      </span>
+                      <Input
+                        id="paymentProof"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
+                      />
+                    </Label>
                   </div>
                 </div>
               )}
