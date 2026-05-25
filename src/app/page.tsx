@@ -4,11 +4,12 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
-import { ArrowRight, Utensils, CreditCard, Clock, Star, MapPin } from 'lucide-react'
+import { ArrowRight, Utensils, CreditCard, Clock, Star, MapPin, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
 export default function Home() {
   const heroImg = PlaceHolderImages.find(img => img.id === 'hero-bg')
+  const haloHaloImg = PlaceHolderImages.find(img => img.id === 'menu-halo-halo')?.imageUrl || 'https://picsum.photos/seed/halohalo/800/600'
   
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -26,7 +27,7 @@ export default function Home() {
         />
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-3xl">
-            <Badge className="mb-6 py-1.5 px-4 bg-primary text-white text-sm uppercase tracking-widest font-bold border-none">Cebu's #1 Delivery</Badge>
+            <Badge className="mb-6 py-1.5 px-4 bg-primary text-white text-sm uppercase tracking-widest font-bold border-none shadow-lg shadow-primary/20">Cebu's #1 Delivery</Badge>
             <h1 className="text-6xl md:text-8xl font-headline font-black text-white mb-8 leading-[1.1]">
               The Queen City's <span className="text-primary italic">Best Flavors</span>
             </h1>
@@ -49,26 +50,13 @@ export default function Home() {
             <div className="mt-16 flex items-center gap-8 text-white/60">
               <div className="flex -space-x-3">
                 {[1,2,3,4].map(i => (
-                  <div key={i} className="h-12 w-12 rounded-full border-2 border-background bg-muted overflow-hidden">
-                    <Image src={`https://picsum.photos/seed/user${i}/100/100`} alt="User" width={48} height={48} />
+                  <div key={i} className="h-12 w-12 rounded-full border-2 border-background bg-muted overflow-hidden relative">
+                    <Image src={`https://picsum.photos/seed/user${i}/100/100`} alt="User" fill className="object-cover" />
                   </div>
                 ))}
               </div>
               <p className="text-sm font-medium">Joined by <span className="text-white font-bold">12,000+</span> Cebuano foodies</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Badges */}
-      <section className="py-12 border-b bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-between items-center gap-8 opacity-40 grayscale">
-            <div className="text-2xl font-black italic">GRAB FOOD</div>
-            <div className="text-2xl font-black italic">FOODPANDA</div>
-            <div className="text-2xl font-black italic">CEBU DAILY</div>
-            <div className="text-2xl font-black italic">SUNDAY POST</div>
-            <div className="text-2xl font-black italic">ISLAND LIFE</div>
           </div>
         </div>
       </section>
@@ -116,7 +104,7 @@ export default function Home() {
           <div className="bg-foreground rounded-[3rem] p-12 md:p-20 overflow-hidden relative">
             <div className="absolute top-0 right-0 w-1/2 h-full hidden lg:block">
               <Image 
-                src={PlaceHolderImages.find(img => img.id === 'menu-halo-halo')?.imageUrl || ''} 
+                src={haloHaloImg} 
                 alt="Halo Halo" 
                 fill 
                 className="object-cover opacity-60 mix-blend-overlay"
@@ -129,8 +117,8 @@ export default function Home() {
                 It's not just food, it's a Cebuano ritual. Get the world's best mangoes and classic desserts delivered within 30 minutes.
               </p>
               <Link href="/restaurants">
-                <Button className="h-16 px-10 rounded-2xl text-xl font-bold shadow-xl shadow-black/20">
-                  Order Desserts Now
+                <Button className="h-16 px-10 rounded-2xl text-xl font-bold shadow-xl shadow-black/20 group">
+                  Order Desserts Now <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </div>
