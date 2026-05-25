@@ -122,10 +122,6 @@ export default function RestaurantsPage() {
         <div className="mb-12">
           <h1 className="text-4xl font-headline font-bold mb-4">Cebu&apos;s Finest Restaurants</h1>
           <p className="text-muted-foreground">Discover the authentic flavors of Cebu, from street food to gourmet lechon.</p>
-          <div className="flex items-center gap-2 mt-4 text-sm text-muted-foreground">
-            <Clock className="h-4 w-4" />
-            <span>Status based on Manila Time (PST)</span>
-          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
