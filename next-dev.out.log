@@ -5,7 +5,4 @@
 
  ✓ Starting...
 Creating turbopack project { dir: 'C:\\Users\\anasc\\Downloads\\RMS', testMode: true }
- ✓ Ready in 1715ms
- ○ Compiling /restaurants ...
- ✓ Compiled /restaurants in 5.5s
- GET /restaurants 200 in 6390ms
+ ✓ Ready in 2.6s

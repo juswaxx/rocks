@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { useFirestore } from '../provider';
 import { useUser } from './use-user';
+import { ADMIN_EMAIL } from '@/lib/admin-demo';
 
 type UserRole = 'admin' | 'user' | null;
 
@@ -28,6 +29,13 @@ export function useUserRole() {
       setLoading(true);
 
       try {
+        if (user.email?.toLowerCase() === ADMIN_EMAIL) {
+          if (!cancelled) {
+            setRole('admin');
+          }
+          return;
+        }
+
         const snapshot = await getDoc(doc(db, 'users', user.uid));
         const userRole = snapshot.data()?.role === 'admin' ? 'admin' : 'user';
 
